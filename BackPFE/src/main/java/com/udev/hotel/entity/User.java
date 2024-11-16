@@ -1,7 +1,12 @@
 package com.udev.hotel.entity;
 
+import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
 
+import org.hibernate.annotations.BatchSize;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.udev.hotel.config.Constants;
@@ -11,16 +16,20 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
-
 @Entity
 @Table(name = "users")
-public class User {
+public class User extends AbstractAuditingEntity implements Serializable{
+	
+    private static final long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -61,30 +70,15 @@ public class User {
     @Column(name = "dateNaissance")
     private LocalDate dateNaissance;
 
-    @ManyToOne
-    private Role role;
+    @JsonIgnore
+    @ManyToMany
+    @JoinTable(
+        name = "user_role",
+        joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
+        inverseJoinColumns = {@JoinColumn(name = "role_name", referencedColumnName = "name")})
 
-    
-	public User() {
-		super();
-	}
-	
-
-	public User(Long id, String nom, String prenom, String email, String password, String adresse, String telephone,
-			int pointsFidelite, LocalDate dateNaissance, Role role) {
-		super();
-		this.id = id;
-		this.nom = nom;
-		this.prenom = prenom;
-		this.email = email;
-		this.password = password;
-		this.adresse = adresse;
-		this.telephone = telephone;
-		this.pointsFidelite = pointsFidelite;
-		this.dateNaissance = dateNaissance;
-		this.role = role;
-	}
-
+    @BatchSize(size = 20)
+    private Set<Role> authorities = new HashSet<>();
 
 	public Long getId() {
 		return id;
@@ -158,12 +152,39 @@ public class User {
 		this.dateNaissance = dateNaissance;
 	}
 
-	public Role getRole() {
-		return role;
+
+	public Set<Role> getAuthorities() {
+		return authorities;
 	}
 
-	public void setRole(Role role) {
-		this.role = role;
+	public void setAuthorities(Set<Role> authorities) {
+		this.authorities = authorities;
 	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		User other = (User) obj;
+		return Objects.equals(id, other.id);
+	}
+
+	@Override
+	public String toString() {
+		return "User [nom=" + nom + ", prenom=" + prenom + ", email=" + email + ", password=" + password + ", adresse="
+				+ adresse + ", telephone=" + telephone + ", pointsFidelite=" + pointsFidelite + ", dateNaissance="
+				+ dateNaissance + "]";
+	}
+
+	
 
 }

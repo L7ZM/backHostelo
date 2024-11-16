@@ -1,39 +1,55 @@
 package com.udev.hotel.entity;
 
+import java.io.Serializable;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "role")
-public class Role {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    
-    @NotNull
-    @Column(name = "nom", nullable = false)
-    private String nomDuRole;
+public class Role implements Serializable {
+	private static final long serialVersionUID = 1L;
 
-	public Long getId() {
-		return id;
+	@NotNull
+	@Size(max = 50)
+	@Id
+	@Column(length = 50)
+	private String name;
+
+	public String getName() {
+		return name;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
+	public void setName(String name) {
+		this.name = name;
 	}
 
-	public String getNomDuRole() {
-		return nomDuRole;
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (o == null || getClass() != o.getClass()) {
+			return false;
+		}
+
+		Role role = (Role) o;
+
+		return !(name != null ? !name.equals(role.name) : role.name != null);
 	}
 
-	public void setNomDuRole(String nomDuRole) {
-		this.nomDuRole = nomDuRole;
+	@Override
+	public int hashCode() {
+		return name != null ? name.hashCode() : 0;
 	}
 
-    
+	@Override
+	public String toString() {
+		return "Role{" + "name='" + name + '\'' + "}";
+	}
+
 }
