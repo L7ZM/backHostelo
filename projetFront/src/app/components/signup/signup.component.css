@@ -1,0 +1,5 @@
+.alert-sm {
+  font-size: 0.8rem;  /* smaller text */
+  padding: 0.25rem 0.5rem;  /* less padding */
+  margin-bottom: 0.5rem;  /* smaller bottom margin */
+}

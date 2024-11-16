@@ -6,6 +6,7 @@ import { HomeComponent } from "./components/home/home.component";
 import { NavbarComponent } from "./components/navbar/navbar.component";
 import { FooterComponent } from './components/footer/footer.component';
 import { AboutComponent } from './components/about/about.component';
+
 @Component({
   selector: 'app-root',
   standalone: true,
