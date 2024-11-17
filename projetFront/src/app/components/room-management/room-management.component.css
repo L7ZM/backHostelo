@@ -1,0 +1,16 @@
+/* room-management.component.css */
+.card {
+  margin: 20px;
+}
+
+.p-toolbar {
+  margin-bottom: 10px;
+}
+
+.p-button {
+  margin-right: 10px;
+}
+
+.p-table {
+  margin-top: 20px;
+}

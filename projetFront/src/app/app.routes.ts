@@ -3,12 +3,14 @@ import { HomeComponent } from './components/home/home.component';
 import { AboutComponent } from './components/about/about.component';
 import { LoginComponent } from './components/login/login.component';
 import { SignupComponent } from './components/signup/signup.component';
+import { RoomManagementComponent } from './components/room-management/room-management.component';
 
 export const routes: Routes = [
     { path: '', component: HomeComponent },
     { path: 'about', component: AboutComponent },
     { path: 'login', component: LoginComponent },
-    { path: 'signUp', component: SignupComponent }
+    { path: 'signUp', component: SignupComponent },
+    { path: 'room', component: RoomManagementComponent }
 
 
 
