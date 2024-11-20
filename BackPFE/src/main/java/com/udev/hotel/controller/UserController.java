@@ -61,7 +61,7 @@ public class UserController {
 //	private AuthenticationManager authenticationManager;
 
 //	UserRepository userRepository,
-	public UserController( UserService userService) {
+	public UserController(UserService userService) {
 
 //		this.userRepository = userRepository;
 		this.userService = userService;
@@ -87,8 +87,8 @@ public class UserController {
 			return ResponseEntity.created(new URI("/api/users/" + newUser.getEmail())).body(newUser);
 		}
 	}
-@CrossOrigin(origins = "http://localhost:4200")
 
+	@CrossOrigin(origins = "http://localhost:4200")
 	@PostMapping("/register")
 	public ResponseEntity<User> registerUser(@RequestBody UserDTO userDTO, @RequestParam String password) {
 
@@ -151,18 +151,17 @@ public class UserController {
 	public List<String> getAuthorities() {
 		return userService.getAuthorities();
 	}
-	
+
 	@GetMapping("/me")
-    public ResponseEntity<User> authenticatedUser() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+	public ResponseEntity<User> authenticatedUser() {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        User currentUser = (User) authentication.getPrincipal();
+		User currentUser = (User) authentication.getPrincipal();
 
-        return ResponseEntity.ok(currentUser);
-    }
-	
+		return ResponseEntity.ok(currentUser);
+	}
 
-    @GetMapping("/user/userProfile")
+	@GetMapping("/user/userProfile")
 	@PreAuthorize("hasAuthority('ROLE_USER')")
 
 	public String userProfile() {
