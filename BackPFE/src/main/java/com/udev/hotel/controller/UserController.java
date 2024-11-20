@@ -12,16 +12,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
-<<<<<<< HEAD
 import org.springframework.web.bind.annotation.CrossOrigin;
-=======
+
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
->>>>>>> 10336df (adding jwt authentication , update UserDTO and add new auth controller , LoginUserDTO and loginResponse , configure swagger for api management , add new GlobalExceptionHandler)
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -89,30 +87,7 @@ public class UserController {
 			return ResponseEntity.created(new URI("/api/users/" + newUser.getEmail())).body(newUser);
 		}
 	}
-<<<<<<< HEAD
-	
-	@CrossOrigin(origins = "http://localhost:4200")
-    @PostMapping("/register")
-    public ResponseEntity<User> registerUser(@RequestBody UserDTO userDTO, @RequestParam String password) {
-        User newUser = userService.registerUser(userDTO, password);
-        return ResponseEntity.status(HttpStatus.CREATED).body(newUser);
-    }
-    
-    /**
-     * DELETE /users/:login : delete the "login" User.
-     *
-     * @param login the login of the user to delete
-     * @return the ResponseEntity with status 200 (OK)
-     */
-    @DeleteMapping("/users/{email:" + Constants.LOGIN_REGEX + "}")
-    @Timed
-    @Secured(AuthoritiesConstants.ADMIN)
-    public ResponseEntity<Void> deleteUser(@PathVariable String email) {
-        log.debug("REST request to delete User: {}", email);
-        userService.deleteUser(email);
-        return ResponseEntity.ok().headers(HeaderUtil.createAlert( "A user is deleted with identifier " + email, email)).build();
-    }
-=======
+@CrossOrigin(origins = "http://localhost:4200")
 
 	@PostMapping("/register")
 	public ResponseEntity<User> registerUser(@RequestBody UserDTO userDTO, @RequestParam String password) {
@@ -136,7 +111,6 @@ public class UserController {
 		return ResponseEntity.ok().headers(HeaderUtil.createAlert("A user is deleted with identifier " + email, email))
 				.build();
 	}
->>>>>>> 10336df (adding jwt authentication , update UserDTO and add new auth controller , LoginUserDTO and loginResponse , configure swagger for api management , add new GlobalExceptionHandler)
 
 	/**
 	 * GET /user/:idUser:
