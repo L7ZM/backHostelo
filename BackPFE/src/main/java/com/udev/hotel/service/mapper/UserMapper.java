@@ -29,13 +29,14 @@ public class UserMapper {
 	            user.setNom(userDTO.getNom());
 	            user.setPrenom(userDTO.getPrenom());
 	            user.setEmail(userDTO.getEmail());
+	            user.setPassword(userDTO.getPassword());
 	            user.setAdresse(userDTO.getAdresse());
 	            user.setTelephone(userDTO.getTelephone());
 	            user.setPointsFidelite(userDTO.getPointsFidelite());
 	            user.setDateNaissance(userDTO.getDateNaissance());
 	            Set<Role> roles = this.authoritiesFromStrings(userDTO.getAuthorities());
 	            if (roles != null) {
-	                user.setAuthorities(roles);
+	                user.setRoles(roles);
 	            }
 	            return user;
 	        }

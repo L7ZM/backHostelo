@@ -1,12 +1,15 @@
 package com.udev.hotel.service;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,17 +27,16 @@ public class UserService {
 
 	private final Logger log = LoggerFactory.getLogger(UserService.class);
 
-	private final UserRepository userRepository;
-
-	private final PasswordEncoder passwordEncoder;
-
-	private final RoleRepository roleRepository;
-
-	public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, RoleRepository roleRepository) {
-		this.userRepository = userRepository;
-		this.passwordEncoder = passwordEncoder;
-		this.roleRepository = roleRepository;
-	}
+	  private final UserRepository userRepository;
+	    private final RoleRepository roleRepository;
+	    private final PasswordEncoder passwordEncoder;
+	    
+	    @Autowired
+	    public UserService(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
+	        this.userRepository = userRepository;
+	        this.roleRepository = roleRepository;
+	        this.passwordEncoder = passwordEncoder;
+	    }
 
 	public User createUser(UserDTO userDTO) {
 		User user = new User();
@@ -49,11 +51,11 @@ public class UserService {
 					.map(roleName -> roleRepository.findByName(roleName)
 							.orElseThrow(() -> new IllegalArgumentException("Role not found: " + roleName)))
 					.collect(Collectors.toSet());
-			user.setAuthorities(authorities);
+			user.setRoles(authorities);
 		}
 
-		String encryptedPassword = passwordEncoder.encode("1234");
-		user.setpassword(encryptedPassword);
+		String encryptedPassword = passwordEncoder.encode(userDTO.getPassword());
+		user.setPassword(encryptedPassword);
 		userRepository.save(user);
 		log.debug("Created Information for User: {}", user);
 		return user;
@@ -68,7 +70,7 @@ public class UserService {
 		Set<Role> authorities = new HashSet<>();
 		String encryptedPassword = passwordEncoder.encode(password);
 		newUser.setEmail(userDTO.getEmail());
-		newUser.setpassword(encryptedPassword);
+		newUser.setPassword(encryptedPassword);
 		newUser.setPrenom(userDTO.getPrenom());
 		newUser.setNom(userDTO.getNom());
 		newUser.setAdresse(userDTO.getAdresse());
@@ -76,7 +78,7 @@ public class UserService {
 		newUser.setTelephone(userDTO.getTelephone());
 		newUser.setEmail(userDTO.getEmail());
 		authorities.add(authority);
-		newUser.setAuthorities(authorities);
+		newUser.setRoles(authorities);
 		userRepository.save(newUser);
 		log.debug("Created Information for User: {}", newUser);
 		return newUser;
@@ -94,6 +96,19 @@ public class UserService {
 	 */
 	public List<String> getAuthorities() {
 		return roleRepository.findAll().stream().map(Role::getName).collect(Collectors.toList());
+	}
+
+	public Optional<User> loadUserByUsername(String username) {
+		return userRepository.findByEmail(username);
+
+	}
+
+	public List<User> allUsers() {
+		 List<User> users = new ArrayList<>();
+
+	        userRepository.findAll().forEach(users::add);
+
+	        return users;
 	}
 
 }
