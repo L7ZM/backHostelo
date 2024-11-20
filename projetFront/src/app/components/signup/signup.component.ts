@@ -5,16 +5,18 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { EmployeeService } from '../../services/employee.service';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { CalendarModule } from 'primeng/calendar';
 
 @Component({
   selector: 'app-signup',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, HttpClientModule],
+  imports: [CommonModule, ReactiveFormsModule, HttpClientModule,CalendarModule],
   providers: [EmployeeService, HttpClient],
   templateUrl: './signup.component.html',
   styleUrls: ['./signup.component.css'],
 })
 export class SignupComponent {
+[x: string]: any;
   myform2: FormGroup;
   
   constructor(

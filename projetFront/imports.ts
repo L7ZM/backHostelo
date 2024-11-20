@@ -49,6 +49,7 @@ import { MenuModule } from 'primeng/menu';
 import { MenubarModule } from 'primeng/menubar';
 import { MessageModule } from 'primeng/message';
 import { MessagesModule } from 'primeng/messages';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { MeterGroupModule } from 'primeng/metergroup';
 import { OrderListModule } from 'primeng/orderlist';
@@ -109,6 +110,7 @@ import { NgModule } from '@angular/core';
 
 @NgModule({
   imports: [
+   
     AvatarModule,
     AvatarGroupModule,
     AnimateOnScrollModule,
@@ -323,6 +325,6 @@ import { NgModule } from '@angular/core';
     InputIconModule,
     AutoFocusModule
   ],
-  providers: [  ]
+  providers: [ MessageService,ConfirmationService  ]
 })
 export class ImportsModule {}

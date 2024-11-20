@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
-
+import { ImportsModule } from '../../../../imports';
 @Component({
   selector: 'app-about',
   standalone: true,
-  imports: [],
+  imports: [ImportsModule
+  ],
   templateUrl: './about.component.html',
   styleUrl: './about.component.css'
 })

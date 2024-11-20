@@ -1,8 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Room } from './room.model';
 import { FormsModule } from '@angular/forms';
-import { ImportsModule } from './imports';
-import { Table } from 'primeng/table';
+import { ImportsModule } from '../../../../imports';
+import { RouterModule } from '@angular/router';
+import { RoomService } from '../../services/room.service';
 
 
 @Component({
@@ -10,95 +11,180 @@ import { Table } from 'primeng/table';
   standalone: true,
   imports: [
     ImportsModule,
-    FormsModule
+    FormsModule,
   ],
   templateUrl: './room-management.component.html',
   styleUrls: ['./room-management.component.css']
 })
 export class RoomManagementComponent implements OnInit {
-  @ViewChild('dt') dt: Table | undefined;
-  rooms: Room[] = [];
-  selectedRooms: Room[] = [];
-  roomDialog: boolean = false;
-  room: Room = this.initializeRoom();
-  statuses: string[] = ['AVAILABLE', 'BOOKED', 'OUTOFSERVICE'];
-  types: string[] = ['Single', 'Double', 'Suite', 'Penthouse'];
-  amenities = [
-    { label: 'Wi-Fi', value: 'wifi' },
-    { label: 'TV', value: 'tv' },
-    { label: 'Air Conditioning', value: 'ac' },
-    { label: 'Minibar', value: 'minibar' },
-    { label: 'Breakfast', value: 'breakfast' }
-  ];
+  rooms: Room[] = []; // List of rooms
+  room: Room = { numeroChambre: 0, type: '', prix: 0, etat: '', description: '', photos: [''] }; // New room object
+  selectedRoom: Room | null = null; // Room selected for editing
+  roomDialog: boolean = false; // To show the dialog for creating or editing rooms
+  isEditMode: boolean = false; // Flag to check if we're editing a room
 
-  selectedAmenities: string[] = [];
+  constructor() {}
 
-  constructor() { }
-
-  ngOnInit(): void {
-    this.rooms = [];
+  ngOnInit() {
+    this.loadMockRooms(); // Load mock data for now
   }
 
-  private initializeRoom(): Room {
-    return {
-      id: 0,
-      roomNumber: '',
-      type: '',
-      price: 0,
-      status: 'AVAILABLE',
-      amenities: [],
-      image: '',
-      description: ''
-    };
+  // Mock room data
+  loadMockRooms() {
+    this.rooms = [
+      { id: 1, numeroChambre: 101, type: 'Single', prix: 100, etat: 'Available', description: 'A comfortable single room', photos: ['https://via.placeholder.com/100x75' ]},
+      { id: 2, numeroChambre: 102, type: 'Double', prix: 150, etat: 'Booked', description: 'A spacious double room', photos: ['https://via.placeholder.com/100x75' ]},
+      { id: 3, numeroChambre: 103, type: 'Suite', prix: 250, etat: 'Available', description: 'A luxurious suite', photos: ['https://via.placeholder.com/100x75'] }
+    ];
   }
 
+  // Open dialog for creating a new room
   openNew() {
-    this.room = this.initializeRoom();
-    this.roomDialog = true;
+    this.room = { numeroChambre: 0, type: '', prix: 0, etat: '', description: '', photos: [''] }; // Reset room
+    this.isEditMode = false;
+    this.roomDialog = true; // Open dialog
   }
 
-  hideDialog() {
-    this.roomDialog = false;
+  // Edit an existing room
+  editRoom(room: Room) {
+    this.room = { ...room }; // Copy room details
+    this.isEditMode = true;
+    this.roomDialog = true; // Open dialog
   }
 
+  // Save room (either create or update)
   saveRoom() {
-    if (this.room.id === 0) {
-      this.room.id = this.rooms.length + 1;
-      this.room.amenities = this.selectedAmenities;
-      this.rooms.push(this.room);
-    } else {
+    if (this.isEditMode) {
       const index = this.rooms.findIndex(r => r.id === this.room.id);
       if (index !== -1) {
-        this.rooms[index] = this.room;
+        this.rooms[index] = this.room; // Update the room in the list
       }
+    } else {
+      this.room.id = this.rooms.length + 1; // Simulate assigning a new ID
+      this.rooms.push(this.room); // Add the new room to the list
     }
+    this.roomDialog = false; // Close dialog
+  }
+
+  // Delete a room
+  deleteRoom(room: Room) {
+    if (confirm('Are you sure you want to delete this room?')) {
+      this.rooms = this.rooms.filter(r => r.id !== room.id); // Remove the room from the list
+    }
+  }
+
+  onFileSelect(event: any) {
+    const files = event.target.files as FileList; // Explicitly cast to FileList
+    this.room.photos = []; // Clear existing photos if any
+  
+    if (files && files.length) {
+      // Type assertion for files array
+      Array.from(files).forEach((file: File) => {
+        const reader = new FileReader();
+        reader.onload = () => {
+          this.room.photos.push(reader.result as string); // Add each photo as a base64 string
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+  }
+  
+  
+  // Close the dialog
+  closeDialog() {
     this.roomDialog = false;
   }
+  
 
-  deleteSelectedRooms() {
-    this.rooms = this.rooms.filter(room => !this.selectedRooms.includes(room));
-    this.selectedRooms = [];
-  }
+  // rooms: Room[] = []; // List of rooms
+  // room: Room = { numeroChambre: 0, type: '', prix: 0, etat: '', description: '' }; // Room model
+  // selectedRoom: Room | null = null; // Selected room for actions
+  // roomDialog: boolean = false; // To show dialog
+  // isEditMode: boolean = false; // Flag to check if we're editing a room
 
-  deleteRoom(room: Room) {
-    this.rooms = this.rooms.filter(r => r.id !== room.id);
-  }
+  // constructor(private roomService: RoomService) {}
 
-  getSeverity(status: string): "success" | "info" | "warning" | "danger" | "secondary" | "contrast" {
-    switch (status) {
-      case 'AVAILABLE':
-        return 'success';  // Map to 'success' for available
-      case 'BOOKED':
-        return 'danger';   // Map to 'danger' for booked
-      case 'OUTOFSERVICE':
-        return 'warning';  // Map to 'warning' for out of service
-      default:
-        return 'info';     // Default case to 'info'
-    }
-  }
-  filterGlobal(event: any) {
-    if (this.dt) {
-      this.dt.filterGlobal(event.target.value, 'contains');
-    }
-  }
+  // ngOnInit() {
+  //   this.loadRooms(); // Fetch rooms from the backend
+  // }
+
+  // // Load rooms from the backend API
+  // loadRooms() {
+  //   this.roomService.getRooms().subscribe(
+  //     (rooms) => {
+  //       this.rooms = rooms;
+  //     },
+  //     (error) => {
+  //       console.error('Error loading rooms', error);
+  //     }
+  //   );
+  // }
+
+  // // Open dialog for creating a new room
+  // openNew() {
+  //   this.room = { numeroChambre: 0, type: '', prix: 0, etat: '', description: '' }; // Reset room
+  //   this.isEditMode = false;
+  //   this.roomDialog = true; // Open dialog
+  // }
+
+  // // Edit an existing room
+  // editRoom(room: Room) {
+  //   this.room = { ...room }; // Copy room details
+  //   this.isEditMode = true;
+  //   this.roomDialog = true; // Open dialog
+  // }
+
+  // // Save a room (create or update)
+  // saveRoom() {
+  //   if (this.isEditMode) {
+  //     // Update existing room
+  //     this.roomService.updateRoom(this.room).subscribe(
+  //       (updatedRoom) => {
+  //         const index = this.rooms.findIndex(r => r.id === updatedRoom.id);
+  //         if (index !== -1) {
+  //           this.rooms[index] = updatedRoom; // Update room in the list
+  //         }
+  //         this.roomDialog = false; // Close dialog
+  //       },
+  //       (error) => {
+  //         console.error('Error updating room', error);
+  //       }
+  //     );
+  //   } else {
+  //     // Add a new room
+  //     this.roomService.createRoom(this.room).subscribe(
+  //       (newRoom) => {
+  //         this.rooms.push(newRoom); // Add new room to the list
+  //         this.roomDialog = false; // Close dialog
+  //       },
+  //       (error) => {
+  //         console.error('Error creating room', error);
+  //       }
+  //     );
+  //   }
+  // }
+
+  // // Delete a room
+  // deleteRoom(room: Room) {
+  //   if (confirm('Are you sure you want to delete this room?')) {
+  //     this.roomService.deleteRoom(room.id!).subscribe(
+  //       () => {
+  //         this.rooms = this.rooms.filter(r => r.id !== room.id); // Remove room from list
+  //       },
+  //       (error) => {
+  //         console.error('Error deleting room', error);
+  //       }
+  //     );
+  //   }
+  // }
+
+  // // Close dialog
+  // closeDialog() {
+  //   this.roomDialog = false;
+  // }
+ 
+ 
+
+
+
 }

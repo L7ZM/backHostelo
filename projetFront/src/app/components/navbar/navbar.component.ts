@@ -11,5 +11,35 @@ import {MatToolbarModule} from '@angular/material/toolbar';
   styleUrl: './navbar.component.css'
 })
 export class NavbarComponent {
+  items: any[];
 
+  constructor() {
+    this.items = [
+      {
+        label: 'Hotel',
+        icon: 'pi pi-fw pi-home',
+        routerLink: '/home' // Define your routing path here
+      },
+      {
+        label: 'Rooms',
+        icon: 'pi pi-fw pi-bed',
+        routerLink: '/rooms'
+      },
+      {
+        label: 'Bookings',
+        icon: 'pi pi-fw pi-calendar',
+        routerLink: '/bookings'
+      },
+      {
+        label: 'About Us',
+        icon: 'pi pi-fw pi-info-circle',
+        routerLink: '/about-us'
+      },
+      {
+        label: 'Contact',
+        icon: 'pi pi-fw pi-phone',
+        routerLink: '/contact'
+      }
+    ];
+  }
 }
