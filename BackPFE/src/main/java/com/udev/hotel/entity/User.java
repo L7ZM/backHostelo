@@ -2,11 +2,15 @@ package com.udev.hotel.entity;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
 import org.hibernate.annotations.BatchSize;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.udev.hotel.config.Constants;
@@ -26,59 +30,66 @@ import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "users")
-public class User extends AbstractAuditingEntity implements Serializable{
+public class User extends AbstractAuditingEntity implements UserDetails, Serializable {
+
+	private static final long serialVersionUID = 1L;
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+
+	@Size(min = 1, max = 50)
+	@Column(name = "last_name", length = 50)
+	@NotNull
+	private String nom;
+
+	@Size(min = 1, max = 50)
+	@Column(name = "first_name", length = 50)
+	@NotNull
+	private String prenom;
+
+	@Pattern(regexp = Constants.LOGIN_REGEX)
+	@Size(min = 1, max = 50)
+	@Column(name = "email", unique = true)
+	@NotNull
+	private String email;
+
+	@NotNull
+	@Column(name = "password")
+	private String password;
+
+	@Size(min = 1, max = 50)
+	@Column(name = "adresse")
+	private String adresse;
+
+	@Column(name = "num_tel")
+	private String telephone;
+
+	@Column(name = "pointFidelite")
+	private int pointsFidelite;
+
+	@Column(name = "dateNaissance")
+	private LocalDate dateNaissance;
+
 	
-    private static final long serialVersionUID = 1L;
+	@ManyToMany
+	@JoinTable(name = "user_role", joinColumns = {
+			@JoinColumn(name = "user_id", referencedColumnName = "id") }, inverseJoinColumns = {
+					@JoinColumn(name = "role_name", referencedColumnName = "name") })
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    
-    @Size(min = 1, max = 50)
-    @Column(name = "last_name", length = 50)
-    @NotNull
-    private String nom;
+	@BatchSize(size = 20)
+	private Set<Role> roles = new HashSet<>();
 
-    @Size(min = 1, max = 50)
-    @Column(name = "first_name", length = 50)
-    @NotNull
-    private String prenom;
-    
+	public User(Long id, @Size(min = 1, max = 50) @NotNull String nom, @NotNull String password) {
+		super();
+		this.id = id;
+		this.nom = nom;
+		this.password = password;
+	}
 
-    @Pattern(regexp = Constants.LOGIN_REGEX)
-    @Size(min = 1, max = 50)
-    @Column(name = "email" , unique = true)  
-    @NotNull
-    private String email;
-    
-    @JsonIgnore
-    @NotNull
-    @Column(name = "password", length = 60)
-    private String password;
-    
-    @Size(min = 1, max = 50)
-    @Column(name = "adresse")
-    private String adresse;
-    
-    @Column(name = "num_tel")
-    private String telephone;
-    
-    @Column(name = "pointFidelite")
-    private int pointsFidelite;
-    
-    
-    @Column(name = "dateNaissance")
-    private LocalDate dateNaissance;
-
-    @JsonIgnore
-    @ManyToMany
-    @JoinTable(
-        name = "user_role",
-        joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
-        inverseJoinColumns = {@JoinColumn(name = "role_name", referencedColumnName = "name")})
-
-    @BatchSize(size = 20)
-    private Set<Role> authorities = new HashSet<>();
+	public User() {
+		// TODO Auto-generated constructor stub
+	}
 
 	public Long getId() {
 		return id;
@@ -112,11 +123,11 @@ public class User extends AbstractAuditingEntity implements Serializable{
 		this.email = email;
 	}
 
-	public String getpassword() {
+	public String getPassword() {
 		return password;
 	}
 
-	public void setpassword(String password) {
+	public void setPassword(String password) {
 		this.password = password;
 	}
 
@@ -152,13 +163,12 @@ public class User extends AbstractAuditingEntity implements Serializable{
 		this.dateNaissance = dateNaissance;
 	}
 
-
-	public Set<Role> getAuthorities() {
-		return authorities;
+	public Set<Role> getRoles() {
+		return roles;
 	}
 
-	public void setAuthorities(Set<Role> authorities) {
-		this.authorities = authorities;
+	public void setRoles(Set<Role> roles) {
+		this.roles = roles;
 	}
 
 	@Override
@@ -185,6 +195,34 @@ public class User extends AbstractAuditingEntity implements Serializable{
 				+ dateNaissance + "]";
 	}
 
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		return List.of();
+	}
+
+	@Override
+	public String getUsername() {
+		return email;
+	}
 	
+	@Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 
 }

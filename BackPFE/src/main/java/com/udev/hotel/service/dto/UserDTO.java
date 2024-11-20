@@ -31,6 +31,10 @@ public class UserDTO {
 	@Pattern(regexp = Constants.LOGIN_REGEX)
 	@Size(min = 1, max = 50)
 	private String email;
+	
+	
+	@NotNull(message = "Password cannot be null")
+	private String password; 
 
 	@Size(min = 1, max = 50)
 	private String adresse;
@@ -61,6 +65,7 @@ public class UserDTO {
 		this.nom = user.getNom();
 		this.prenom = user.getPrenom();
 		this.email = user.getEmail();
+//		this.password = user.getPassword();
 		this.adresse = user.getAdresse();
 		this.telephone = user.getTelephone();
 		this.pointsFidelite = user.getPointsFidelite();
@@ -69,7 +74,15 @@ public class UserDTO {
 		this.createdDate = user.getCreatedDate();
 		this.lastModifiedBy = user.getLastModifiedBy();
 		this.lastModifiedDate = user.getLastModifiedDate();
-		this.authorities = user.getAuthorities().stream().map(Role::getName).collect(Collectors.toSet());
+		this.authorities = user.getRoles().stream().map(Role::getName).collect(Collectors.toSet());
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
 	public Long getId() {
