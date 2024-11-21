@@ -1,4 +1,4 @@
-package com.udev.hotel.web.rest.util;
+package com.udev.hotel.controller.exceptionHandler.util;
 
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;

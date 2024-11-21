@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.udev.hotel.config.LoginResponse;
-import com.udev.hotel.entity.User;
+import com.udev.hotel.domain.entity.User;
 import com.udev.hotel.service.AuthenticationService;
 import com.udev.hotel.service.JwtService;
 import com.udev.hotel.service.dto.LoginUserDto;

@@ -1,4 +1,4 @@
-package com.udev.hotel.web.rest.error;
+package com.udev.hotel.controller.exceptionHandler;
 
 public class EmailAlreadyUsedException extends BadRequestAlertException {
 

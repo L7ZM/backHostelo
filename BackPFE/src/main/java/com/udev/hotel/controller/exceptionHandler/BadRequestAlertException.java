@@ -1,4 +1,4 @@
-package com.udev.hotel.web.rest.error;
+package com.udev.hotel.controller.exceptionHandler;
 
 import java.net.URI;
 import java.util.HashMap;

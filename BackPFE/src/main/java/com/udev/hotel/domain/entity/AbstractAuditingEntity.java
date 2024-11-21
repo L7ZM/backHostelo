@@ -1,4 +1,4 @@
-package com.udev.hotel.entity;
+package com.udev.hotel.domain.entity;
 
 import java.io.Serializable;
 import java.time.Instant;

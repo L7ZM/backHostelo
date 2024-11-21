@@ -8,8 +8,8 @@ import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.udev.hotel.config.Constants;
-import com.udev.hotel.entity.Role;
-import com.udev.hotel.entity.User;
+import com.udev.hotel.domain.entity.Role;
+import com.udev.hotel.domain.entity.User;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

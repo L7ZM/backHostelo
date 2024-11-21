@@ -14,11 +14,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.udev.hotel.entity.Role;
-import com.udev.hotel.entity.User;
-import com.udev.hotel.repository.RoleRepository;
-import com.udev.hotel.repository.UserRepository;
-import com.udev.hotel.security.AuthoritiesConstants;
+import com.udev.hotel.config.security.AuthoritiesConstants;
+import com.udev.hotel.domain.entity.Role;
+import com.udev.hotel.domain.entity.User;
+import com.udev.hotel.domain.repository.RoleRepository;
+import com.udev.hotel.domain.repository.UserRepository;
 import com.udev.hotel.service.dto.UserDTO;
 
 @Service
