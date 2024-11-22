@@ -1,4 +1,4 @@
-package com.udev.hotel.web.rest.error;
+package com.udev.hotel.controller.exceptionHandler;
 
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ProblemDetail;

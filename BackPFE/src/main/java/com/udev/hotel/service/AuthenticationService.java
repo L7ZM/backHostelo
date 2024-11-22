@@ -12,11 +12,11 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.udev.hotel.entity.Role;
-import com.udev.hotel.entity.User;
-import com.udev.hotel.repository.RoleRepository;
-import com.udev.hotel.repository.UserRepository;
-import com.udev.hotel.security.AuthoritiesConstants;
+import com.udev.hotel.config.security.AuthoritiesConstants;
+import com.udev.hotel.domain.entity.Role;
+import com.udev.hotel.domain.entity.User;
+import com.udev.hotel.domain.repository.RoleRepository;
+import com.udev.hotel.domain.repository.UserRepository;
 import com.udev.hotel.service.dto.LoginUserDto;
 import com.udev.hotel.service.dto.RegisterUserDto;
 import com.udev.hotel.service.dto.UserDTO;
@@ -61,7 +61,8 @@ public class AuthenticationService {
 	        newUser.setPassword(encryptedPassword);
 	    } else {
 	        throw new IllegalArgumentException("Password cannot be null");
-	    }		newUser.setPrenom(userDTO.getPrenom());
+	    }		
+	    newUser.setPrenom(userDTO.getPrenom());
 		newUser.setNom(userDTO.getNom());
 		newUser.setAdresse(userDTO.getAdresse());
 		newUser.setDateNaissance(userDTO.getDateNaissance());

@@ -1,4 +1,4 @@
-package com.udev.hotel.web.rest.error;
+package com.udev.hotel.controller.exceptionHandler;
 
 import org.zalando.problem.AbstractThrowableProblem;
 import org.zalando.problem.Status;

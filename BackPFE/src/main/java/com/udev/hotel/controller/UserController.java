@@ -30,15 +30,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.udev.hotel.config.Constants;
-import com.udev.hotel.entity.User;
-import com.udev.hotel.repository.UserRepository;
-import com.udev.hotel.security.AuthoritiesConstants;
+import com.udev.hotel.config.security.AuthoritiesConstants;
+import com.udev.hotel.controller.exceptionHandler.BadRequestAlertException;
+import com.udev.hotel.controller.exceptionHandler.EmailAlreadyUsedException;
+import com.udev.hotel.controller.exceptionHandler.util.HeaderUtil;
+import com.udev.hotel.domain.entity.User;
+import com.udev.hotel.domain.repository.UserRepository;
 import com.udev.hotel.service.JwtService;
 import com.udev.hotel.service.UserService;
 import com.udev.hotel.service.dto.UserDTO;
-import com.udev.hotel.web.rest.error.BadRequestAlertException;
-import com.udev.hotel.web.rest.error.EmailAlreadyUsedException;
-import com.udev.hotel.web.rest.util.HeaderUtil;
 
 import io.micrometer.core.annotation.Timed;
 import jakarta.validation.Valid;
@@ -175,15 +175,5 @@ public class UserController {
 		return "Welcome to Admin Profile";
 	}
 
-//	@PostMapping("/generateToken")
-//	public String authenticateAndGetToken(@RequestBody AuthRequest authRequest) {
-//		org.springframework.security.core.Authentication authentication = authenticationManager.authenticate(
-//				new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
-//		if (authentication.isAuthenticated()) {
-//			return jwtService.generateToken(authRequest.getUsername());
-//		} else {
-//			throw new UsernameNotFoundException("invalid user request !");
-//		}
-//	}
 
 }

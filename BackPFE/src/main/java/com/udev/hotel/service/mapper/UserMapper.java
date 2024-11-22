@@ -5,8 +5,8 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
-import com.udev.hotel.entity.Role;
-import com.udev.hotel.entity.User;
+import com.udev.hotel.domain.entity.Role;
+import com.udev.hotel.domain.entity.User;
 import com.udev.hotel.service.dto.UserDTO;
 
 @Service

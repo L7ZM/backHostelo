@@ -1,4 +1,4 @@
-package com.udev.hotel.security;
+package com.udev.hotel.config.security;
 
 public final class AuthoritiesConstants {
 

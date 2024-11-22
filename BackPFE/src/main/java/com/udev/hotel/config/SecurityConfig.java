@@ -15,7 +15,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import com.udev.hotel.security.jwt.JwtAuthenticationFilter;
+import com.udev.hotel.config.security.jwt.JwtAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity

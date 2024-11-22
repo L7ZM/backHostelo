@@ -1,4 +1,4 @@
-package com.udev.hotel.security.jwt;
+package com.udev.hotel.config.security.jwt;
 
 import java.io.IOException;
 

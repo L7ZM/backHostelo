@@ -1,4 +1,4 @@
-package com.udev.hotel.repository;
+package com.udev.hotel.domain.repository;
 
 import java.util.Optional;
 
@@ -8,7 +8,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import com.udev.hotel.entity.User;
+import com.udev.hotel.domain.entity.User;
 import com.udev.hotel.service.dto.UserDTO;
 
 @Repository
