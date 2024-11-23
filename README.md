@@ -5,7 +5,7 @@ Projet de fin d'étude pour la gestion d'hotel
 
 - Application monolithique
 - Base de données PostgreSQL pour le développement et la production .
-- Angular 18
+- Angular 15
 - JWT authentification
 - Maven
 - Swagger pour l'api management 
