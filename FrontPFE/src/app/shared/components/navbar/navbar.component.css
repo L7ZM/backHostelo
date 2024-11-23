@@ -1,106 +1,159 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: 'Arial', sans-serif;
-}
+@import "primeng/resources/themes/lara-light-blue/theme.css";
+@import "primeng/resources/primeng.css";
+@import "primeicons/primeicons.css";
 
+/* General Navbar Styling */
 .navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 15px 50px;
-  background-color: #ffffff;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-  position: sticky;
-  top: 0;
-  z-index: 1000;
+  background-color: #1a1a2e;
+  padding: 10px 20px;
+  color: #ffffff;
+  font-family: Arial, sans-serif;
 }
 
-.logo {
+/* Logo */
+.navbar .logo img {
   height: 50px;
-  cursor: pointer;
 }
 
+/* Navigation Menu */
 .nav-menu {
   display: flex;
   list-style: none;
-  gap: 30px;
+  padding: 0;
+  margin: 0;
 }
 
-.nav-item {
+.nav-menu li {
+  margin: 0 15px;
   position: relative;
 }
 
-.nav-link {
+.nav-menu a {
+  color: #ffffff;
   text-decoration: none;
-  color: #333;
-  font-weight: 500;
-  transition: color 0.3s ease;
+  font-size: 16px;
+  transition: color 0.3s;
 }
 
-.nav-link:hover {
-  color: #0066cc;
+.nav-menu a:hover {
+  color: #ff9f43;
 }
 
-.dropdown {
-  position: relative;
-}
-
+/* Dropdown Styling */
 .dropdown-content {
+  z-index: 1050; 
   display: none;
   position: absolute;
   top: 100%;
   left: 0;
-  background-color: #ffffff;
-  min-width: 200px;
-  box-shadow: 0 8px 16px rgba(0,0,0,0.1);
-  z-index: 10;
-  padding: 10px 0;
-  border-radius: 4px;
+  background-color: #2b2b45;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  border-radius: 5px;
+  padding: 10px;
+}
+
+.dropdown-content a {
+  display: block;
+  color: #ffffff;
+  padding: 8px 15px;
+  text-decoration: none;
+  transition: background-color 0.3s;
+}
+
+.dropdown-content a:hover {
+  background-color: #ff9f43;
 }
 
 .dropdown:hover .dropdown-content {
   display: block;
 }
 
-.dropdown-item {
-  display: block;
-  padding: 10px 20px;
-  color: #333;
-  text-decoration: none;
-  transition: background-color 0.3s ease;
-}
-
-.dropdown-item:hover {
-  background-color: #f4f4f4;
-}
-
+/* Action Buttons */
 .nav-actions {
   display: flex;
-  gap: 15px;
+  align-items: center;
+  gap: 10px;
 }
 
-.btn {
-  padding: 10px 20px;
+.nav-actions .btn {
+  padding: 8px 20px;
   border: none;
   border-radius: 5px;
+  font-size: 14px;
   cursor: pointer;
-  font-weight: 600;
-  transition: all 0.3s ease;
+  transition: background-color 0.3s;
 }
 
-.btn-primary {
-  background-color: #0066cc;
-  color: white;
-}
-
-.btn-secondary {
+.nav-actions .login {
   background-color: transparent;
-  border: 2px solid #0066cc;
-  color: #0066cc;
+  color: #ff9f43;
+  border: 1px solid #ff9f43;
 }
 
-.btn:hover {
-  opacity: 0.9;
+.nav-actions .login:hover {
+  background-color: #ff9f43;
+  color: #ffffff;
+}
+
+.nav-actions .signup {
+  background-color: #ff9f43;
+  color: #ffffff;
+}
+
+.nav-actions .signup:hover {
+  background-color: #e58228;
+}
+
+/* Profile Menu Styling */
+.profile-menu {
+  display: flex;
+  align-items: center;
+}
+
+.profile-icon {
+  color: #ffffff;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 50%;
+  transition: background-color 0.2s;
+}
+
+.profile-icon:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* PrimeNG Menu Customization */
+:host ::ng-deep .p-menu {
+  background-color: #2b2b45 !important;
+  border: none !important;
+  border-radius: 8px !important;
+  min-width: 150px !important;
+  margin-top: 5px !important;
+  box-shadow: 0 4px 6px rgba(4, 4, 4, 0.3) !important;
+  padding: 0.5rem !important;
+}
+
+:host ::ng-deep .p-menu .p-menuitem-link {
+  color: #ffffff !important;
+  padding: 0.75rem 1rem !important;
+  transition: background-color 0.2s !important;
+  border-radius: 4px !important;
+}
+
+:host ::ng-deep .p-menu .p-menuitem-link:hover {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+:host ::ng-deep .p-menu .p-menuitem-link .p-menuitem-icon {
+  color: #ffffff !important;
+  margin-right: 10px !important;
+}
+
+:host ::ng-deep .p-menu .p-menuitem-link .p-menuitem-text {
+  color: #ffffff !important;
+  font-size: 0.875rem !important;
 }
