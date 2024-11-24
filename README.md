@@ -32,6 +32,13 @@ L'administrateur dispose d'un onglet "administration" qui lui permet de controle
     </ul>
 </ul>
 <ul>
+    <li>User:</li>
+    <ul>
+        <li>Login: anas@gmail.com </li>
+        <li>mot de passe: anas@123 </li>
+    </ul>
+</ul>
+<ul>
     <li>Admin:</li>
     <ul>
         <li>Login: admin@example.com</li>
