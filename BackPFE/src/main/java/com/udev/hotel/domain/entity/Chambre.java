@@ -1,6 +1,7 @@
 package com.udev.hotel.domain.entity;
 
-import com.udev.hotel.config.TypeChambre;
+import com.udev.hotel.config.constants.EtatChambre;
+import com.udev.hotel.config.constants.TypeChambre;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -24,17 +25,19 @@ public class Chambre {
 	@Column(name = "numeroChambre", nullable = false)
 	private int numeroChambre;
 
-	@Enumerated(EnumType.STRING) 
+	@Enumerated(EnumType.STRING)
 	@NotNull
+	@Column(name = "etat", nullable = false)
+	private EtatChambre etat;
+	
+	@Enumerated(EnumType.STRING)
+	@NotNull
+	@Column(name = "type", nullable = false)
 	private TypeChambre type;
 
 	@NotNull
 	@Column(name = "prix", nullable = false)
 	private double prix;
-
-	@NotNull
-	@Column(name = "etat", nullable = false)
-	private String etat;
 
 	@Column(name = "description", nullable = false)
 	private String description;
@@ -47,14 +50,13 @@ public class Chambre {
 	public Chambre() {
 	}
 
-	public Chambre(Long id, @NotNull int numeroChambre, @NotNull TypeChambre type, @NotNull double prix,
-			@NotNull String etat, String description, byte[] photos) {
+	public Chambre(@NotNull int numeroChambre, @NotNull EtatChambre etat, @NotNull TypeChambre type,
+			@NotNull double prix, String description, @NotNull byte[] photos) {
 		super();
-		this.id = id;
 		this.numeroChambre = numeroChambre;
+		this.etat = etat;
 		this.type = type;
 		this.prix = prix;
-		this.etat = etat;
 		this.description = description;
 		this.photos = photos;
 	}
@@ -91,11 +93,11 @@ public class Chambre {
 		this.prix = prix;
 	}
 
-	public String getEtat() {
+	public EtatChambre getEtat() {
 		return etat;
 	}
 
-	public void setEtat(String etat) {
+	public void setEtat(EtatChambre etat) {
 		this.etat = etat;
 	}
 

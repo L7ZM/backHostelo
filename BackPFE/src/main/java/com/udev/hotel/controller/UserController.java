@@ -29,7 +29,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.udev.hotel.config.Constants;
+import com.udev.hotel.config.constants.Constants;
 import com.udev.hotel.config.security.AuthoritiesConstants;
 import com.udev.hotel.controller.exceptionHandler.BadRequestAlertException;
 import com.udev.hotel.controller.exceptionHandler.EmailAlreadyUsedException;

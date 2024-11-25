@@ -1,12 +1,20 @@
 package com.udev.hotel.domain.entity;
 
+import java.time.LocalDate;
 import java.time.ZonedDateTime;
+import java.util.List;
+
+import com.udev.hotel.config.constants.ReservationStatus;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
@@ -20,63 +28,49 @@ public class Reservation {
     
     @NotNull
     @Column(name = "date_debut", nullable = false)
-    private ZonedDateTime dateDebut;
+    private LocalDate  dateDebut;
     
     @NotNull
     @Column(name = "date_fin", nullable = false)
-    private ZonedDateTime dateFin;
+    private LocalDate  dateFin;
     
-    @Column(name = "etat", nullable = false)
-    private String etat;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false)
+    private ReservationStatus status;
 
     @ManyToOne
-    private User client;
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
     @ManyToOne
+    @JoinColumn(name = "chambre_id", nullable = false)
     private Chambre chambre;
+    
+    @ElementCollection
+    private List<Long> servicesAdditionnels;
 
-    public Reservation(){
-    	
-    }
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public ZonedDateTime getDateDebut() {
+	public LocalDate getDateDebut() {
 		return dateDebut;
 	}
 
-	public void setDateDebut(ZonedDateTime dateDebut) {
+	public void setDateDebut(LocalDate dateDebut) {
 		this.dateDebut = dateDebut;
 	}
 
-	public ZonedDateTime getDateFin() {
+	public LocalDate getDateFin() {
 		return dateFin;
 	}
 
-	public void setDateFin(ZonedDateTime dateFin) {
+	public void setDateFin(LocalDate dateFin) {
 		this.dateFin = dateFin;
 	}
 
-	public String getEtat() {
-		return etat;
+	public User getUser() {
+		return user;
 	}
 
-	public void setEtat(String etat) {
-		this.etat = etat;
-	}
-
-	public User getClient() {
-		return client;
-	}
-
-	public void setClient(User client) {
-		this.client = client;
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 	public Chambre getChambre() {
@@ -86,5 +80,20 @@ public class Reservation {
 	public void setChambre(Chambre chambre) {
 		this.chambre = chambre;
 	}
-    
+
+	public List<Long> getServicesAdditionnels() {
+		return servicesAdditionnels;
+	}
+
+	public void setServicesAdditionnels(List<Long> servicesAdditionnels) {
+		this.servicesAdditionnels = servicesAdditionnels;
+	}
+
+	public ReservationStatus getStatus() {
+		return status;
+	}
+
+	public void setStatus(ReservationStatus status) {
+		this.status = status;
+	}
 }

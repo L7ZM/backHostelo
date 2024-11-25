@@ -7,7 +7,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.udev.hotel.config.Constants;
+import com.udev.hotel.config.constants.Constants;
 import com.udev.hotel.domain.entity.Role;
 import com.udev.hotel.domain.entity.User;
 
