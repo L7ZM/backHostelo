@@ -48,10 +48,12 @@ public class SecurityConfig {
                 		"/api/users",
                 		"/api/register",
                 		"/api/me",
+                		"/api/user/{id}",
                 		"/api/user/{idUser}",
                 		"/api/reservations",
 //                    "/api/addNewUser",
                     "/api/users/authorities",
+                    "/api/chambres/**",
                     "/v3/api-docs/**",
                     "/swagger-ui/**",
                     "/swagger-ui.html",
@@ -71,19 +73,4 @@ public class SecurityConfig {
 
         return http.build();
     }
-    
-//    @Bean
-//    CorsConfigurationSource corsConfigurationSource() {
-//        CorsConfiguration configuration = new CorsConfiguration();
-//
-//        configuration.setAllowedOrigins(List.of("http://localhost:8080"));
-//        configuration.setAllowedMethods(List.of("GET","POST"));
-//        configuration.setAllowedHeaders(List.of("Authorization","Content-Type"));
-//
-//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-//
-//        source.registerCorsConfiguration("/**",configuration);
-//
-//        return source;
-//    }
 }
