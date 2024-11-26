@@ -32,8 +32,6 @@ public class UserDTO {
 	@Size(min = 1, max = 50)
 	private String email;
 	
-	
-	@NotNull(message = "Password cannot be null")
 	private String password; 
 
 	@Size(min = 1, max = 50)
