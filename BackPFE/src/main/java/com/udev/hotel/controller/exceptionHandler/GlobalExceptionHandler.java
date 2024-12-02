@@ -1,7 +1,9 @@
 package com.udev.hotel.controller.exceptionHandler;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ProblemDetail;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AccountStatusException;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.security.SignatureException;
+import jakarta.persistence.EntityNotFoundException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -53,5 +56,9 @@ public class GlobalExceptionHandler {
         }
 
         return errorDetail;
+    }
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<String> handleEntityNotFoundException(EntityNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
     }
 }

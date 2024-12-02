@@ -1,21 +1,22 @@
 package com.udev.hotel.controller;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.udev.hotel.config.LoginResponse;
+import com.udev.hotel.domain.entity.Role;
 import com.udev.hotel.domain.entity.User;
 import com.udev.hotel.service.AuthenticationService;
 import com.udev.hotel.service.JwtService;
 import com.udev.hotel.service.dto.LoginUserDto;
-import com.udev.hotel.service.dto.RegisterUserDto;
 import com.udev.hotel.service.dto.UserDTO;
 
 import jakarta.validation.Valid;
@@ -50,8 +51,18 @@ public class AuthenticationController {
 
         String jwtToken = jwtService.generateToken(authenticatedUser);
 
-        LoginResponse loginResponse = new LoginResponse().setToken(jwtToken).setExpiresIn(jwtService.getExpirationTime());
+        List<String> roles = authenticatedUser.getRoles()
+                .stream()
+                .map(Role::getName)
+                .collect(Collectors.toList());
 
+        LoginResponse loginResponse = new LoginResponse()
+                .setToken(jwtToken)
+                .setExpiresIn(jwtService.getExpirationTime())
+                .setUsername(authenticatedUser.getUsername())
+                .setEmail(authenticatedUser.getEmail())
+                .setRoles(roles);
+        log.info(authenticatedUser.getUsername());
         return ResponseEntity.ok(loginResponse);
     }
     

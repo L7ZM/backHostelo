@@ -56,14 +56,9 @@ public class UserController {
 		this.userService = userService;
 	}
 
-	@GetMapping("/welcome")
-	public String welcome() {
-		return "Welcome this endpoint is not secure";
-	}
-
 	@PostMapping("/users")
 	@Timed
-	// @Secured(AuthoritiesConstants.ADMIN)
+	 @Secured(AuthoritiesConstants.ADMIN)
 	public ResponseEntity<User> createUser(@Valid @RequestBody UserDTO userDTO) throws URISyntaxException {
 		log.debug("REST request to save User : {}", userDTO);
 
@@ -77,7 +72,6 @@ public class UserController {
 		}
 	}
 
-//	@CrossOrigin(origins = "http://localhost:4200")
 	@PostMapping("/register")
 	public ResponseEntity<User> registerUser(@RequestBody UserDTO userDTO, @RequestParam String password) {
 
@@ -126,7 +120,6 @@ public class UserController {
 	@GetMapping("/users")
 	@Timed
 	public ResponseEntity<List<User>> getAllUsers() {
-//		userRepository.findAll().stream().map(UserDTO::new).collect(Collectors.toList());
 		List<User> users = userService.allUsers();
 		return ResponseEntity.ok(users);
 	}
@@ -141,40 +134,23 @@ public class UserController {
 		return userService.getAuthorities();
 	}
 
-	@GetMapping("/user/userProfile")
-	@PreAuthorize("hasAuthority('ROLE_USER')")
-
-	public String userProfile() {
-		return "Welcome to User Profile";
-	}
-
-	@GetMapping("/admin/adminProfile")
-	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
-
-	public String adminProfile() {
-		return "Welcome to Admin Profile";
-	}
-
 	@PutMapping("/users")
 	@Timed
 	@Secured(AuthoritiesConstants.ADMIN)
 	public ResponseEntity<UserDTO> updateUser(@Valid @RequestBody UserDTO userDTO) {
 	    log.debug("REST request to update User: {}", userDTO);
 
-	    // Check if the email is already in use by another user
 	    Optional<User> existingUserByEmail = userRepository.findByEmail(userDTO.getEmail());
 	    if (existingUserByEmail.isPresent() && !existingUserByEmail.get().getId().equals(userDTO.getId())) {
 	        throw new EmailAlreadyUsedException();
 	    }
 
-	    // Update the user using the service layer
 	    Optional<UserDTO> updatedUser = userService.updateUser(userDTO);
 
 	    if (updatedUser.isEmpty()) {
-	        return ResponseEntity.notFound().build(); // Handle case where user update fails
+	        return ResponseEntity.notFound().build(); 
 	    }
 
-	    // Return the updated user and an appropriate response
 	    return ResponseEntity.ok()
 	        .headers(HeaderUtil.createAlert("A user is updated with identifier " + userDTO.getEmail(), userDTO.getEmail()))
 	        .body(updatedUser.get());

@@ -3,6 +3,7 @@ package com.udev.hotel.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,6 +24,7 @@ public class ReservationController {
     private ReservationService reservationService;
 
     @PostMapping
+    @PreAuthorize("hasRole('ROLE_USER')")
     public ResponseEntity<Reservation> reserver(@RequestBody ReservationRequest request) {
         Reservation reservation = reservationService.createReservation(
                 request.getUserId(),
