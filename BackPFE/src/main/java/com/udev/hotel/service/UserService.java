@@ -1,9 +1,7 @@
 package com.udev.hotel.service;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -11,6 +9,8 @@ import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,29 +40,6 @@ public class UserService {
 		this.passwordEncoder = passwordEncoder;
 	}
 
-	public User createUser(UserDTO userDTO) {
-		User user = new User();
-		user.setEmail(userDTO.getEmail());
-		user.setPrenom(userDTO.getPrenom());
-		user.setNom(userDTO.getNom());
-		user.setAdresse(userDTO.getAdresse());
-		user.setDateNaissance(userDTO.getDateNaissance());
-		user.setTelephone(userDTO.getTelephone());
-		if (userDTO.getAuthorities() != null) {
-			Set<Role> authorities = userDTO.getAuthorities().stream()
-					.map(roleName -> roleRepository.findByName(roleName)
-							.orElseThrow(() -> new IllegalArgumentException("Role not found: " + roleName)))
-					.collect(Collectors.toSet());
-			user.setRoles(authorities);
-		}
-
-		String encryptedPassword = passwordEncoder.encode(userDTO.getPassword());
-		user.setPassword(encryptedPassword);
-		userRepository.save(user);
-		log.debug("Created Information for User: {}", user);
-		return user;
-	}
-
 	public User registerUser(UserDTO userDTO, String password) {
 
 		User newUser = new User();
@@ -86,34 +63,40 @@ public class UserService {
 		return newUser;
 	}
 
-	public void deleteUser(String email) {
-		userRepository.findByEmail(email).ifPresent(user -> {
-			userRepository.delete(user);
-			log.debug("Deleted User: {}", user);
-		});
-	}
-
-	/**
-	 * @return a list of all the authorities
-	 */
-	public List<String> getAuthorities() {
-		return roleRepository.findAll().stream().map(Role::getName).collect(Collectors.toList());
-	}
-
 	public Optional<User> loadUserByUsername(String username) {
 		return userRepository.findByEmail(username);
 
 	}
-
-	public List<User> allUsers() {
-		List<User> users = new ArrayList<>();
-
-		userRepository.findAll().forEach(users::add);
-
-		return users;
-	}
-
-	/**
+	
+    /**
+     * Update basic information (first name, last name, email ..) for the current user.
+     *
+     * @param prenom first name of user
+     * @param nom last name of user
+     * @param email email id of user
+     * @param adresse language key
+     * @param telephone of user
+     * @param dateNaissance of user
+     * 
+     */
+    public void updateUser(String prenom, String nom, String email,String password, String adresse, String telephone, LocalDate dateNaissance) {
+		
+    	String encryptedPassword = passwordEncoder.encode(password);
+    	SecurityUtils.getCurrentUserLogin()
+            .flatMap(userRepository::findByEmail)
+            .ifPresent(user -> {
+                user.setPrenom(prenom);
+                user.setNom(nom);
+                user.setEmail(email);
+                user.setPassword(encryptedPassword);
+                user.setAdresse(adresse);
+                user.setTelephone(telephone);
+                user.setDateNaissance(dateNaissance);
+                log.debug("Changed Information for User: {}", user);
+            });
+    }
+    
+    /**
 	 * Update all information for a specific user, and return the modified user.
 	 *
 	 * @param userDTO user to update
@@ -140,30 +123,23 @@ public class UserService {
 	        });
 	}
 	
-    /**
-     * Update basic information (first name, last name, email, language) for the current user.
-     *
-     * @param prenom first name of user
-     * @param nom last name of user
-     * @param email email id of user
-     * @param adresse language key
-     * @param telephone of user
-     * @param dateNaissance of user
-     * @param pointFidelite of user
-     */
-    public void updateUser(String prenom, String nom, String email, String adresse, String telephone, LocalDate dateNaissance ,int pointFidelite) {
-        SecurityUtils.getCurrentUserLogin()
-            .flatMap(userRepository::findByEmail)
-            .ifPresent(user -> {
-                user.setPrenom(prenom);
-                user.setNom(nom);
-                user.setEmail(email);
-                user.setAdresse(adresse);
-                user.setTelephone(telephone);
-                user.setDateNaissance(dateNaissance);
-                user.setPointsFidelite(pointFidelite);
-                log.debug("Changed Information for User: {}", user);
-            });
+	public void updatePassword(String newPassword) {
+        User currentUser = getCurrentUser(); 
+        log.info(currentUser.toString());
+        if (currentUser.getPassword() != null) {
+	        String encodedNewPassword = passwordEncoder.encode(newPassword);
+	        log.debug(encodedNewPassword); 
+	        currentUser.setPassword(encodedNewPassword);
+	    } else {
+	        throw new IllegalArgumentException("Password cannot be null");
+	    }
+        userRepository.save(currentUser);
+    }
+	
+	private User getCurrentUser() {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        return userRepository.findByEmail(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
 }
 

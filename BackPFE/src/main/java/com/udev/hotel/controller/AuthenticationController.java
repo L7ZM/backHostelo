@@ -60,7 +60,12 @@ public class AuthenticationController {
                 .setToken(jwtToken)
                 .setExpiresIn(jwtService.getExpirationTime())
                 .setUsername(authenticatedUser.getUsername())
+                .setNom(authenticatedUser.getNom())
+                .setPrenom(authenticatedUser.getPrenom())
                 .setEmail(authenticatedUser.getEmail())
+                .setAdresse(authenticatedUser.getAdresse())
+                .setDateNaissance(authenticatedUser.getDateNaissance())
+                .setTelephone(authenticatedUser.getTelephone())
                 .setRoles(roles);
         log.info(authenticatedUser.getUsername());
         return ResponseEntity.ok(loginResponse);

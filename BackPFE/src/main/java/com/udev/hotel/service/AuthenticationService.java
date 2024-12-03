@@ -54,10 +54,9 @@ public class AuthenticationService {
 
 		Set<Role> authorities = new HashSet<>();
 		newUser.setEmail(userDTO.getEmail());
-		 // Use the password from the DTO
 	    if (userDTO.getPassword() != null) {
 	        String encryptedPassword = passwordEncoder.encode(userDTO.getPassword());
-	        log.debug(encryptedPassword); // Debugging the encrypted password (remove in production)
+	        log.debug(encryptedPassword); 
 	        newUser.setPassword(encryptedPassword);
 	    } else {
 	        throw new IllegalArgumentException("Password cannot be null");
