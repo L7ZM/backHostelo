@@ -1,6 +1,8 @@
 package com.udev.hotel.service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -12,6 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.udev.hotel.config.security.AuthoritiesConstants;
+import com.udev.hotel.config.security.SecurityUtils;
+import com.udev.hotel.controller.exceptionHandler.EmailAlreadyUsedException;
 import com.udev.hotel.domain.entity.Role;
 import com.udev.hotel.domain.entity.ServiceAdditionnel;
 import com.udev.hotel.domain.entity.User;
@@ -61,6 +66,29 @@ public class AdminService {
 		return user;
 	}
 	
+	public User registerUser(UserDTO userDTO, String password) {
+
+		User newUser = new User();
+		Role authority = roleRepository.findByName(AuthoritiesConstants.USER)
+				.orElseThrow(() -> new IllegalArgumentException("Role not found: " + AuthoritiesConstants.USER));
+
+		Set<Role> authorities = new HashSet<>();
+		String encryptedPassword = passwordEncoder.encode(password);
+		newUser.setEmail(userDTO.getEmail());
+		newUser.setPassword(encryptedPassword);
+		newUser.setPrenom(userDTO.getPrenom());
+		newUser.setNom(userDTO.getNom());
+		newUser.setAdresse(userDTO.getAdresse());
+		newUser.setDateNaissance(userDTO.getDateNaissance());
+		newUser.setTelephone(userDTO.getTelephone());
+		newUser.setEmail(userDTO.getEmail());
+		authorities.add(authority);
+		newUser.setRoles(authorities);
+		userRepository.save(newUser);
+		log.debug("Created Information for User: {}", newUser);
+		return newUser;
+	}
+	
 	/**
 	 * @return a list of all the authorities
 	 */
@@ -84,23 +112,83 @@ public class AdminService {
 	 */
 	public Optional<UserDTO> updateUser(UserDTO userDTO) {
 	    return userRepository.findById(userDTO.getId())
-	        .map(user -> {
-	            user.setEmail(userDTO.getEmail().toLowerCase());
-	            user.setPrenom(userDTO.getPrenom());
-	            user.setNom(userDTO.getNom());
-	            user.setAdresse(userDTO.getAdresse());
-	            user.setTelephone(userDTO.getTelephone());
-	            user.setDateNaissance(userDTO.getDateNaissance());
-	            Set<Role> authorities = userDTO.getAuthorities().stream()
-	                .map(roleRepository::findByName)
-	                .filter(Optional::isPresent)
-	                .map(Optional::get)
-	                .collect(Collectors.toSet());
-	            user.setRoles(authorities);
-	            userRepository.save(user);
-	            log.debug("Updated User: {}", user);
-	            return new UserDTO(user);
-	        });
+		        .map(user -> {
+		            user.setEmail(userDTO.getEmail().toLowerCase());
+		            user.setPrenom(userDTO.getPrenom());
+		            user.setNom(userDTO.getNom());
+		            user.setAdresse(userDTO.getAdresse());
+		            user.setTelephone(userDTO.getTelephone());
+		            user.setDateNaissance(userDTO.getDateNaissance());
+		            if (userDTO.getPassword() != null) {
+		    	        String encryptedPassword = passwordEncoder.encode(userDTO.getPassword());
+		    	        log.debug(encryptedPassword); 
+		    	        user.setPassword(encryptedPassword);
+		    	    } else {
+		    	        throw new IllegalArgumentException("Password cannot be null");
+		    	    }	
+		            Set<Role> authorities = userDTO.getAuthorities().stream()
+		                .map(roleRepository::findByName)
+		                .filter(Optional::isPresent)
+		                .map(Optional::get)
+		                .collect(Collectors.toSet());
+		            user.setRoles(authorities);
+		            userRepository.save(user);
+		            log.debug("Updated User: {}", user);
+		            return new UserDTO(user);
+		        });
+	}
+	
+	/**
+	 * Update basic information (first name, last name, email ..) for the current
+	 * user.
+	 *
+	 * @param prenom        first name of user
+	 * @param nom           last name of user
+	 * @param email         email id of user
+	 * @param adresse       language key
+	 * @param telephone     of user
+	 * @param dateNaissance of user
+	 * 
+	 */
+	public void updateUser(String prenom, String nom, String email, String password, String adresse, String telephone,
+			LocalDate dateNaissance) {
+
+		SecurityUtils.getCurrentUserLogin().flatMap(userRepository::findByEmail).ifPresent(user -> {
+			if (prenom != null) {
+				user.setPrenom(prenom);
+			}
+			if (nom != null) {
+				user.setNom(nom);
+			}
+			if (email != null) {
+				Optional<User> existingUserByEmail = userRepository.findByEmail(email);
+				if (existingUserByEmail.isPresent()) {
+					throw new EmailAlreadyUsedException();
+				} else {
+
+					user.setEmail(email.toLowerCase());
+				}
+			}
+			if (password != null && !password.isBlank()) {
+				String encryptedPassword = passwordEncoder.encode(password);
+				user.setPassword(encryptedPassword);
+			}
+			if (adresse != null) {
+				user.setAdresse(adresse);
+			}
+			if (telephone != null) {
+				user.setTelephone(telephone);
+			}
+			if (dateNaissance != null) {
+				user.setDateNaissance(dateNaissance);
+			}
+
+			log.debug("Existing Authorities for User: {}", user.getRoles());
+
+			userRepository.save(user);
+
+			log.debug("Changed Information for User: {}", user);
+		});
 	}
 	
 	public ServiceAdditionnel addOrUpdateServiceAdditionnel(String nomService, String description, Double prix) {

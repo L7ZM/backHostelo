@@ -8,6 +8,7 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -53,7 +54,7 @@ public class AdminController {
 		this.adminService = adminService;
 	}
 
-	@PostMapping("/users")
+	@PostMapping("/createUser")
 	@Timed
 	@Secured(AuthoritiesConstants.ADMIN)
 	public ResponseEntity<User> createUser(@Valid @RequestBody UserDTO userDTO) throws URISyntaxException {
@@ -68,6 +69,13 @@ public class AdminController {
 			log.info(newUser.toString());
 			return ResponseEntity.created(new URI("/api/users/" + newUser.getEmail())).body(newUser);
 		}
+	}
+
+	@PostMapping("/register")
+	public ResponseEntity<User> registerUser(@RequestBody UserDTO userDTO, @RequestParam String password) {
+
+		User newUser = adminService.registerUser(userDTO, password);
+		return ResponseEntity.status(HttpStatus.CREATED).body(newUser);
 	}
 
 	/**
@@ -103,12 +111,12 @@ public class AdminController {
 	 */
 	@GetMapping("/users/authorities")
 	@Timed
-	@Secured({ AuthoritiesConstants.ADMIN, AuthoritiesConstants.USER })
+	@Secured(AuthoritiesConstants.ADMIN)
 	public List<String> getAuthorities() {
 		return adminService.getAuthorities();
 	}
 
-	@PutMapping("/users")
+	@PutMapping("/updateUser")
 	@Timed
 	@Secured(AuthoritiesConstants.ADMIN)
 	public ResponseEntity<UserDTO> updateUser(@Valid @RequestBody UserDTO userDTO) {
@@ -149,13 +157,27 @@ public class AdminController {
 
 	@PostMapping("/serviceAdditionnel")
 	@Timed
-//	@Secured(AuthoritiesConstants.ADMIN)
+	@Secured(AuthoritiesConstants.ADMIN)
 	public ResponseEntity<ServiceAdditionnel> createOrUpdateServiceAdditionnel(@RequestParam String nomService,
 			@RequestParam String description, @RequestParam Double prix) {
 		ServiceAdditionnel newServiceAdd = adminService.addOrUpdateServiceAdditionnel(nomService, description, prix);
 		return ResponseEntity.ok().headers(
 				HeaderUtil.createAlert("A service additionnel is created with identifier " + nomService, nomService))
 				.body(newServiceAdd);
+	}
+
+	@PutMapping("/update")
+	@Timed
+	public ResponseEntity<Void> update(@RequestBody UserDTO updateUserDto) {
+		log.debug("REST request to update user information: {}", updateUserDto);
+
+		adminService.updateUser(updateUserDto.getPrenom(), updateUserDto.getNom(), updateUserDto.getEmail(),
+				updateUserDto.getPassword(), updateUserDto.getAdresse(), updateUserDto.getTelephone(),
+				updateUserDto.getDateNaissance());
+
+		return ResponseEntity.ok().headers(HeaderUtil
+				.createAlert("A user is updated with identifier " + updateUserDto.getEmail(), updateUserDto.getEmail()))
+				.build();
 	}
 
 }

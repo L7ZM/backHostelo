@@ -54,59 +54,47 @@ public class UserController {
 	public UserController(UserService userService) {
 
 		this.userService = userService;
-	}
-
-	@PostMapping("/register")
-	public ResponseEntity<User> registerUser(@RequestBody UserDTO userDTO, @RequestParam String password) {
-
-		User newUser = userService.registerUser(userDTO, password);
-		return ResponseEntity.status(HttpStatus.CREATED).body(newUser);
-	}
+	}	
 	
+//	@PutMapping("/update")
+//	@Timed
+//	@Secured(AuthoritiesConstants.USER)
+//	public ResponseEntity<UserDTO> updateUser(@Valid @RequestBody UserDTO userDTO) {
+//	    log.debug("REST request to update User: {}", userDTO);
+//
+//	    Optional<User> existingUserByEmail = userRepository.findByEmail(userDTO.getEmail());
+//	    if (existingUserByEmail.isPresent() && !existingUserByEmail.get().getId().equals(userDTO.getId())) {
+//	        throw new EmailAlreadyUsedException();
+//	    }
+//
+//	    Optional<UserDTO> updatedUser = userService.updateUser(userDTO);
+//
+//	    if (updatedUser.isEmpty()) {
+//	        return ResponseEntity.notFound().build(); 
+//	    }
+//
+//	    return ResponseEntity.ok()
+//	        .headers(HeaderUtil.createAlert("A user is updated with identifier " + userDTO.getEmail(), userDTO.getEmail()))
+//	        .body(updatedUser.get());
+//	}
 	
-	@PutMapping("/users")
-	@Timed
-//	@Secured(AuthoritiesConstants.ADMIN)
-	public ResponseEntity<UserDTO> updateUser(@Valid @RequestBody UserDTO userDTO) {
-	    log.debug("REST request to update User: {}", userDTO);
+	 @PutMapping("/update")
+	 @Timed
+	    public ResponseEntity<Void> updateUser(@RequestBody UserDTO updateUserDto) {
+	        log.debug("REST request to update user information: {}", updateUserDto);
 
-	    Optional<User> existingUserByEmail = userRepository.findByEmail(userDTO.getEmail());
-	    if (existingUserByEmail.isPresent() && !existingUserByEmail.get().getId().equals(userDTO.getId())) {
-	        throw new EmailAlreadyUsedException();
+	        userService.updateUser(
+	            updateUserDto.getPrenom(),
+	            updateUserDto.getNom(),
+	            updateUserDto.getEmail(),
+	            updateUserDto.getPassword(),
+	            updateUserDto.getAdresse(),
+	            updateUserDto.getTelephone(),
+	            updateUserDto.getDateNaissance()
+	        );
+
+	        return ResponseEntity.ok()
+	    	        .headers(HeaderUtil.createAlert("A user is updated with identifier " + updateUserDto.getEmail(), updateUserDto.getEmail()))
+	    	        .build();
 	    }
-
-	    Optional<UserDTO> updatedUser = userService.updateUser(userDTO);
-
-	    if (updatedUser.isEmpty()) {
-	        return ResponseEntity.notFound().build(); 
-	    }
-
-	    return ResponseEntity.ok()
-	        .headers(HeaderUtil.createAlert("A user is updated with identifier " + userDTO.getEmail(), userDTO.getEmail()))
-	        .body(updatedUser.get());
 	}
-	
-	@PutMapping("/update-password")
-    public ResponseEntity<String> updatePassword(@RequestBody String newPassword) {
-        userService.updatePassword(newPassword);
-        return ResponseEntity.ok("Password updated successfully");
-    }
-	
-	/**
-	 * GET /user/:idUser:
-	 * 
-	 * @param idUser
-	 * @return the ResponseEntity with status 200 (OK) and with body the "login"
-	 *         user, or with status 404 (Not Found)
-	 */
-	@GetMapping("/user/{idUser}")
-	@Timed
-	public ResponseEntity<UserDTO> findUserById(@PathVariable("idUser") Long idUser) {
-		log.debug("REST request to get User : {}", idUser);
-
-		Optional<UserDTO> user = Optional.ofNullable(userRepository.findUserById(idUser));
-
-		return user.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
-	}
-
-}
