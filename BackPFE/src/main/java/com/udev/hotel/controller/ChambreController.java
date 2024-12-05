@@ -2,7 +2,6 @@ package com.udev.hotel.controller;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.udev.hotel.config.security.AuthoritiesConstants;
 import com.udev.hotel.domain.entity.Chambre;
 import com.udev.hotel.service.ChambreService;
 
@@ -63,6 +64,7 @@ public class ChambreController {
     }
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @Secured(AuthoritiesConstants.ADMIN)
     public ResponseEntity<Chambre> createChambre(@RequestPart("chambre") String chambreJson,
             @RequestPart("photo")  List<MultipartFile> photos) {
     	 try {
@@ -98,6 +100,7 @@ public class ChambreController {
     }
 
     @PutMapping("/{id}")
+    @Secured(AuthoritiesConstants.ADMIN)
     public ResponseEntity<Chambre> updateChambre(@PathVariable Long id, @RequestBody Chambre updatedChambre) {
         try {
             Chambre updated = chambreService.updateChambre(id, updatedChambre);
@@ -108,6 +111,7 @@ public class ChambreController {
     }
 
     @DeleteMapping("/{id}")
+    @Secured(AuthoritiesConstants.ADMIN)
     public ResponseEntity<Void> deleteChambre(@PathVariable Long id) {
         chambreService.deleteChambre(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

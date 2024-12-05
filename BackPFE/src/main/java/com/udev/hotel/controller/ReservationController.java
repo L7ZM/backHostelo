@@ -3,12 +3,13 @@ package com.udev.hotel.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.udev.hotel.config.security.AuthoritiesConstants;
 import com.udev.hotel.domain.entity.Reservation;
 import com.udev.hotel.service.ReservationService;
 import com.udev.hotel.service.dto.ReservationRequest;
@@ -24,7 +25,7 @@ public class ReservationController {
     private ReservationService reservationService;
 
     @PostMapping
-    @PreAuthorize("hasRole('ROLE_USER')")
+    @Secured({AuthoritiesConstants.USER , AuthoritiesConstants.ADMIN})
     public ResponseEntity<Reservation> reserver(@RequestBody ReservationRequest request) {
         Reservation reservation = reservationService.createReservation(
                 request.getUserId(),
