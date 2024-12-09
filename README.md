@@ -27,7 +27,7 @@ L'administrateur dispose d'un onglet "administration" qui lui permet de controle
 <ul>
     <li>User:</li>
     <ul>
-        <li>Login: user@example.com </li>
+        <li>Login: user@gmail.com </li>
         <li>mot de passe: user123 </li>
     </ul>
 </ul>
