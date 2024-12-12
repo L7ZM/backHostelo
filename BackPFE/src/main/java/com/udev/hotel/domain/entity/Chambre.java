@@ -56,16 +56,11 @@ public class Chambre implements Serializable {
 	@Column(name = "description", nullable = false)
 	private String description;
 
-	@ElementCollection(fetch = FetchType.LAZY)
+	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(name = "chambre_photos", joinColumns = @JoinColumn(name = "chambre_id"))
 	@Column(name = "photo_data")
 	@Lob
-	@JsonIgnore
 	private List<byte[]> photos = new ArrayList<>();
-
-//	@Lob
-//	@Column(name = "photos", nullable = false)
-//	private String photos;
 
 	public Chambre() {
 	}

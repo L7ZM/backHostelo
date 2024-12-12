@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.databind.introspect.TypeResolutionContext.Empty;
 import com.udev.hotel.config.security.AuthoritiesConstants;
 import com.udev.hotel.config.security.SecurityUtils;
 import com.udev.hotel.controller.exceptionHandler.EmailAlreadyUsedException;
@@ -111,6 +112,9 @@ public class AdminService {
 	 * @return updated user
 	 */
 	public Optional<UserDTO> updateUser(UserDTO userDTO) {
+		if (userRepository.findById(userDTO.getId()) != null) {
+			log.info(userDTO.toString());
+		}
 	    return userRepository.findById(userDTO.getId())
 		        .map(user -> {
 		            user.setEmail(userDTO.getEmail().toLowerCase());

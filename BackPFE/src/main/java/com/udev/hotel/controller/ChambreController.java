@@ -25,6 +25,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.udev.hotel.config.security.AuthoritiesConstants;
 import com.udev.hotel.domain.entity.Chambre;
 import com.udev.hotel.service.ChambreService;
+import com.udev.hotel.service.dto.ChambreDTO;
 
 
 @RestController
@@ -42,25 +43,11 @@ public class ChambreController {
         return new ResponseEntity<>(chambres, HttpStatus.OK);
     }
 
-    
     @GetMapping("/{id}")
-    public ResponseEntity<Chambre> getChambreById(@PathVariable Long id) {
+    public ResponseEntity<ChambreDTO> getChambreById(@PathVariable Long id) {
         return chambreService.getChambreById(id)
-                .map(chambre -> new ResponseEntity<>(chambre, HttpStatus.OK))
+                .map(chambre -> new ResponseEntity<>(new ChambreDTO(chambre), HttpStatus.OK))
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
-    }
-    
-//    @GetMapping("/{id}")
-//    public ResponseEntity<ChambreDTO> getChambreById(@PathVariable Long id) {
-//        return chambreService.getChambreWithPhotos(id)
-//                .map(chambreDTO -> new ResponseEntity<>(chambreDTO, HttpStatus.OK))
-//                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
-//    }
-    
-    @GetMapping("/{numC}/photos")
-    public ResponseEntity<List<byte[]>> getPhotosByChambreId(@PathVariable Long numC) {
-        List<byte[]> photos = chambreService.getPhotosByChambreId(numC);
-        return ResponseEntity.ok(photos);
     }
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
