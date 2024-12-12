@@ -165,6 +165,13 @@ public class AdminController {
 				HeaderUtil.createAlert("A service additionnel is created with identifier " + nomService, nomService))
 				.body(newServiceAdd);
 	}
+	
+	@DeleteMapping("/{id}")
+    @Secured(AuthoritiesConstants.ADMIN)
+    public ResponseEntity<Void> deleteChambre(@PathVariable Long id) {
+        adminService.deleteServiceAdditionnel(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 
 	@PutMapping("/update")
 	@Timed

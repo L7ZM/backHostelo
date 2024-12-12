@@ -213,6 +213,10 @@ public class AdminService {
 	    return serviceAddRepo.save(serviceAdditionnel);
 	}
 	
+	public void deleteServiceAdditionnel(Long id) {
+		serviceAddRepo.deleteById(id);
+	}
+	
 	public void deleteUser(String email) {
 		userRepository.findByEmail(email).ifPresent(user -> {
 			userRepository.delete(user);

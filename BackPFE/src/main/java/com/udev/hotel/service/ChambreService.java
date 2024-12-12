@@ -29,13 +29,13 @@ public class ChambreService {
 		return chambreRepository.findAll();
 	}
 
-	 @Transactional(readOnly = true)
-	    public Optional<Chambre> getChambreById(Long id) {
-	        Optional<Chambre> chambre = chambreRepository.findByIdWithPhotos(id);
-	        chambre.ifPresent(c -> Hibernate.initialize(c.getPhotos()));
-	        return chambre;
-	    }
-	 
+	@Transactional(readOnly = true)
+	public Optional<Chambre> getChambreById(Long id) {
+		Optional<Chambre> chambre = chambreRepository.findByIdWithPhotos(id);
+		chambre.ifPresent(c -> Hibernate.initialize(c.getPhotos()));
+		return chambre;
+	}
+
 	public Chambre createChambre(List<MultipartFile> photos, Chambre chambre) throws IOException {
 		for (MultipartFile photo : photos) {
 			chambre.getPhotos().add(photo.getBytes());
@@ -68,5 +68,4 @@ public class ChambreService {
 		return chambreRepository.findByEtat(EtatChambre.DISPONIBLE);
 	}
 
-	
 }
