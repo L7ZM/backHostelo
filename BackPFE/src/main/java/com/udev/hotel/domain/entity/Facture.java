@@ -2,8 +2,12 @@ package com.udev.hotel.domain.entity;
 
 import java.time.LocalDate;
 
+import com.udev.hotel.config.constants.PaimentStatus;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -27,8 +31,9 @@ public class Facture {
     @Column(name = "montantTotal")
     private double montantTotal;
     
+    @Enumerated(EnumType.STRING)
     @Column(name = "etatPaiment")
-    private String etatPaiement;
+    private PaimentStatus etatPaiement;
 
     @OneToOne
     @JoinColumn(name = "reservation_id", unique = true)
@@ -38,7 +43,7 @@ public class Facture {
     	
     }
     
-	public Facture(Long id, LocalDate dateEmission, double montantTotal, String etatPaiement, Reservation reservation) {
+	public Facture(Long id, LocalDate dateEmission, double montantTotal, PaimentStatus etatPaiement, Reservation reservation) {
 		super();
 		this.id = id;
 		this.dateEmission = dateEmission;
@@ -71,11 +76,11 @@ public class Facture {
 		this.montantTotal = montantTotal;
 	}
 
-	public String getEtatPaiement() {
+	public PaimentStatus getEtatPaiement() {
 		return etatPaiement;
 	}
 
-	public void setEtatPaiement(String etatPaiement) {
+	public void setEtatPaiement(PaimentStatus etatPaiement) {
 		this.etatPaiement = etatPaiement;
 	}
 
