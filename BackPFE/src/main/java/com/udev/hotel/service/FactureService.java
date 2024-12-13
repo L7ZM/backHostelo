@@ -33,7 +33,7 @@ public class FactureService {
 		Facture facture = new Facture();
 		facture.setDateEmission(LocalDate.now());
 		facture.setMontantTotal(montantTotal);
-		facture.setEtatPaiement(PaimentStatus.NOT_PAYED);
+		facture.setEtatPaiement(PaimentStatus.NOT_PAID);
 		facture.setReservation(reservation);
 
 		return factureRepository.save(facture);
