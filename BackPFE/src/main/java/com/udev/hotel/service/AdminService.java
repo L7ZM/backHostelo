@@ -217,6 +217,10 @@ public class AdminService {
 		serviceAddRepo.deleteById(id);
 	}
 	
+	public List<ServiceAdditionnel> getAllService(){
+		return serviceAddRepo.findAll();
+	}
+	
 	public void deleteUser(String email) {
 		userRepository.findByEmail(email).ifPresent(user -> {
 			userRepository.delete(user);
