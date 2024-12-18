@@ -1,9 +1,10 @@
 package com.udev.hotel.service;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,12 +21,14 @@ import com.udev.hotel.domain.repository.ServiceAdditionnelRepository;
 import com.udev.hotel.domain.repository.UserRepository;
 import com.udev.hotel.service.dto.ReservationRequest;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
 public class ReservationService {
-
+	
+	private final Logger log = LoggerFactory.getLogger(ReservationService.class);
 	private final ReservationRepository reservationRepository;
 	private final ChambreRepository chambreRepository;
 	private final UserRepository userRepository;
@@ -68,28 +71,40 @@ public class ReservationService {
 		return savedReservation;
 	}
 
-	public void cancelReservation(Long reservationId){
-		
+	public void cancelReservation(Long reservationId) {
+
 		Reservation reservation = reservationRepository.findById(reservationId)
 				.orElseThrow(() -> new IllegalArgumentException("Reservation introuvable."));
-	
-		LocalDate currentDate = LocalDate.now();
-        LocalDate dateDebutMinus48Hours = reservation.getDateDebut().minusDays(2);
 
-        if (currentDate.isAfter(dateDebutMinus48Hours)) {
-        	throw new IllegalStateException("Cancellation not allowed within 48 hours of the reservation start date.");
-        }		
-		reservationRepository.delete(reservation); 
+		LocalDate currentDate = LocalDate.now();
+		LocalDate dateDebutMinus48Hours = reservation.getDateDebut().minusDays(2);
+
+		if (currentDate.isAfter(dateDebutMinus48Hours)) {
+			throw new IllegalStateException("Cancellation not allowed within 48 hours of the reservation start date.");
+		}
+		reservationRepository.delete(reservation);
 	}
-	
+
 	public List<Reservation> getAllReservation() {
 		return reservationRepository.findAll();
 	}
-	
+
 	@Transactional
-	 public List<ReservationRequest> getReservationsByUsername(String username) {
-		 
+	public List<ReservationRequest> getReservationsByUsername(String username) {
+
 		return reservationRepository.ReservationsByUsername(username);
-	        
-	    }
+
+	}
+	
+	public void validateReservation(Long reservationId) {
+        Reservation reservation = reservationRepository.findById(reservationId)
+            .orElseThrow(() -> new EntityNotFoundException("Reservation not found"));
+
+        if (reservation.getStatus() == ReservationStatus.EN_ATTENTE) {
+            reservation.setStatus(ReservationStatus.CONFIRMEE);
+            reservationRepository.save(reservation);
+        } else {
+            throw new IllegalStateException("Reservation cannot be confirmed in its current status.");
+        }
+    }
 }

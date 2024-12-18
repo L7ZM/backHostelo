@@ -1,6 +1,7 @@
 package com.udev.hotel.service.dto;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import com.udev.hotel.config.constants.ReservationStatus;
 
@@ -10,8 +11,7 @@ public class ReservationRequest {
 	private LocalDate dateDebut;
 	private LocalDate dateFin;
 	private ReservationStatus status;
-	
-	
+
 	public Long getId() {
 		return id;
 	}
@@ -42,7 +42,8 @@ public class ReservationRequest {
 	public void setStatus(ReservationStatus status) {
 		this.status = status;
 	}
-	public ReservationRequest(Long id,int numeroChambre, LocalDate dateDebut, LocalDate dateFin, ReservationStatus status) {
+	public ReservationRequest(Long id, int numeroChambre, LocalDate dateDebut, LocalDate dateFin,
+			ReservationStatus status) {
 		super();
 		this.id = id;
 		this.numeroChambre = numeroChambre;
@@ -50,6 +51,7 @@ public class ReservationRequest {
 		this.dateFin = dateFin;
 		this.status = status;
 	}
+	
 	
 	
 }

@@ -9,19 +9,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.service.annotation.DeleteExchange;
 
 import com.udev.hotel.config.security.AuthoritiesConstants;
-import com.udev.hotel.controller.exceptionHandler.util.HeaderUtil;
 import com.udev.hotel.domain.entity.Reservation;
 import com.udev.hotel.domain.repository.ReservationRepository;
 import com.udev.hotel.service.ReservationService;
@@ -60,8 +57,8 @@ public class ReservationController {
     
     @GetMapping
     @Secured(AuthoritiesConstants.ADMIN)
-    public ResponseEntity<List<Reservation>> getAllReservation(){
-    	List<Reservation> reservation = reservationRepository.findAll(); 
+    public ResponseEntity<List<ReservationRequest>> getAllReservation(){
+    	List<ReservationRequest> reservation = reservationRepository.getAllreservation(); 
 		return new ResponseEntity<>(reservation, HttpStatus.OK);
     }
         
@@ -81,5 +78,15 @@ public class ReservationController {
     	reservationService.cancelReservation(idReservation);
 		return ResponseEntity.ok().build();
     }
+    
+    @PutMapping("/{id}/validate")
+	@Secured(AuthoritiesConstants.ADMIN)
+    public ResponseEntity<String> validateReservation(@PathVariable Long id) {
+        reservationService.validateReservation(id);
+        return ResponseEntity.ok("Reservation has been confirmed successfully.");
+    }
+    
+    
+ 
 
 }

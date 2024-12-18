@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.udev.hotel.config.constants.EtatChambre;
+import com.udev.hotel.config.constants.TypeChambre;
 import com.udev.hotel.domain.entity.Chambre;
 import com.udev.hotel.domain.repository.ChambreRepository;
 
@@ -54,6 +56,32 @@ public class ChambreService {
 			return chambreRepository.save(existingChambre);
 		}).orElseThrow(() -> new RuntimeException("Chambre not found with id " + id));
 	}
+	
+	public Chambre updateChambre(Long id, int numeroChambre, TypeChambre type, double prix, String description, List<MultipartFile> photos) {
+	    return chambreRepository.findById(id).map(existingChambre -> {
+	        existingChambre.setNumeroChambre(numeroChambre);
+	        existingChambre.setType(type);
+	        existingChambre.setPrix(prix);
+	        existingChambre.setDescription(description);
+
+	        if (photos != null && !photos.isEmpty()) {
+	        	List<byte[]> photoBytesList = existingChambre.getPhotos(); 
+//	        	List<byte[]> photoBytesList = new ArrayList<>();
+	            
+	            for (MultipartFile photo : photos) {
+	                try {
+	                    photoBytesList.add(photo.getBytes());
+	                } catch (IOException e) {
+	                    throw new RuntimeException("Error processing photo upload", e);
+	                }
+	            }
+	            existingChambre.setPhotos(photoBytesList);
+	        }
+
+	        return chambreRepository.save(existingChambre);
+	    }).orElseThrow(() -> new RuntimeException("Chambre not found with id " + id));
+	}
+
 
 	public byte[] getPhoto(String fileName) throws IOException {
 		Path filePath = Paths.get(uploadDir + fileName);
