@@ -177,6 +177,7 @@ public class AdminController {
 		List<ServiceAdditionnel> serviceAdditionnel = adminService.getAllService();
 		return ResponseEntity.ok(serviceAdditionnel);
 	}
+
 	
 	@DeleteMapping("/{id}")
     @Secured(AuthoritiesConstants.ADMIN)

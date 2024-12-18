@@ -59,6 +59,7 @@ public class AuthenticationController {
         LoginResponse loginResponse = new LoginResponse()
                 .setToken(jwtToken)
                 .setExpiresIn(jwtService.getExpirationTime())
+                .setId(authenticatedUser.getId())
                 .setUsername(authenticatedUser.getUsername())
                 .setNom(authenticatedUser.getNom())
                 .setPrenom(authenticatedUser.getPrenom())

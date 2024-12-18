@@ -54,47 +54,19 @@ public class UserController {
 	public UserController(UserService userService) {
 
 		this.userService = userService;
-	}	
-	
-//	@PutMapping("/update")
-//	@Timed
-//	@Secured(AuthoritiesConstants.USER)
-//	public ResponseEntity<UserDTO> updateUser(@Valid @RequestBody UserDTO userDTO) {
-//	    log.debug("REST request to update User: {}", userDTO);
-//
-//	    Optional<User> existingUserByEmail = userRepository.findByEmail(userDTO.getEmail());
-//	    if (existingUserByEmail.isPresent() && !existingUserByEmail.get().getId().equals(userDTO.getId())) {
-//	        throw new EmailAlreadyUsedException();
-//	    }
-//
-//	    Optional<UserDTO> updatedUser = userService.updateUser(userDTO);
-//
-//	    if (updatedUser.isEmpty()) {
-//	        return ResponseEntity.notFound().build(); 
-//	    }
-//
-//	    return ResponseEntity.ok()
-//	        .headers(HeaderUtil.createAlert("A user is updated with identifier " + userDTO.getEmail(), userDTO.getEmail()))
-//	        .body(updatedUser.get());
-//	}
-	
-	 @PutMapping("/update")
-	 @Timed
-	    public ResponseEntity<Void> updateUser(@RequestBody UserDTO updateUserDto) {
-	        log.debug("REST request to update user information: {}", updateUserDto);
-
-	        userService.updateUser(
-	            updateUserDto.getPrenom(),
-	            updateUserDto.getNom(),
-	            updateUserDto.getEmail(),
-	            updateUserDto.getPassword(),
-	            updateUserDto.getAdresse(),
-	            updateUserDto.getTelephone(),
-	            updateUserDto.getDateNaissance()
-	        );
-
-	        return ResponseEntity.ok()
-	    	        .headers(HeaderUtil.createAlert("A user is updated with identifier " + updateUserDto.getEmail(), updateUserDto.getEmail()))
-	    	        .build();
-	    }
 	}
+
+	@PutMapping("/update")
+	@Timed
+	public ResponseEntity<Void> updateUser(@RequestBody UserDTO updateUserDto) {
+		log.debug("REST request to update user information: {}", updateUserDto);
+
+		userService.updateUser(updateUserDto.getPrenom(), updateUserDto.getNom(), updateUserDto.getEmail(),
+				updateUserDto.getPassword(), updateUserDto.getAdresse(), updateUserDto.getTelephone(),
+				updateUserDto.getDateNaissance());
+
+		return ResponseEntity.ok().headers(HeaderUtil
+				.createAlert("A user is updated with identifier " + updateUserDto.getEmail(), updateUserDto.getEmail()))
+				.build();
+	}
+}

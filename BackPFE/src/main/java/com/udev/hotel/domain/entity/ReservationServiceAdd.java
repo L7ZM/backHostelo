@@ -23,6 +23,7 @@ public class ReservationServiceAdd {
     private Reservation reservation;
 
     @ManyToOne
+    @JoinColumn(name = "serviceAdditionnel_id", nullable = false)
     private ServiceAdditionnel serviceAdditionnel;
 
     public ReservationServiceAdd() {

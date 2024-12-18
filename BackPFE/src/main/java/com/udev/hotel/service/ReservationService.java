@@ -18,6 +18,7 @@ import com.udev.hotel.domain.repository.ReservationRepository;
 import com.udev.hotel.domain.repository.ReservationServiceAddRepository;
 import com.udev.hotel.domain.repository.ServiceAdditionnelRepository;
 import com.udev.hotel.domain.repository.UserRepository;
+import com.udev.hotel.service.dto.ReservationRequest;
 
 import lombok.RequiredArgsConstructor;
 
@@ -84,4 +85,11 @@ public class ReservationService {
 	public List<Reservation> getAllReservation() {
 		return reservationRepository.findAll();
 	}
+	
+	@Transactional
+	 public List<ReservationRequest> getReservationsByUsername(String username) {
+		 
+		return reservationRepository.ReservationsByUsername(username);
+	        
+	    }
 }

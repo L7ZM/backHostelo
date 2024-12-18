@@ -12,6 +12,7 @@ public class LoginResponse {
 
 	private long expiresIn;
 
+	private Long id;
 	private String username;
 	private String nom;
 	private String prenom;
@@ -21,6 +22,14 @@ public class LoginResponse {
 	private String telephone;
 	private List<String> roles;
 
+	public Long getId() {
+		return id;
+	}
+
+	public LoginResponse setId(Long id) {
+		this.id = id;
+		return this;
+	}
 	public String getToken() {
 		return token;
 	}
