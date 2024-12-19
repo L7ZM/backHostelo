@@ -90,22 +90,36 @@ public class ChambreController {
         }
     }
 
-    @PutMapping("/{id}")
+    @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Secured(AuthoritiesConstants.ADMIN)
     public ResponseEntity<Chambre> updateChambre(@PathVariable Long id,
-                                                 @RequestParam("numeroChambre") int numeroChambre,
-                                                 @RequestParam("type") TypeChambre type,
-                                                 @RequestParam("prix") double prix,
-                                                 @RequestParam("description") String description,
-                                                 @RequestParam("photos") List<MultipartFile> photos) {
-    
+                                                 @RequestPart("chambre") String chambreJson,
+                                                 @RequestPart(value = "photo", required = true) List<MultipartFile> photos) {
         try {
-            Chambre updatedChambre = chambreService.updateChambre(id, numeroChambre, type, prix, description, photos);
+            ObjectMapper objectMapper = new ObjectMapper();
+            Chambre chambre = objectMapper.readValue(chambreJson, Chambre.class);
+
+            log.info("Updating Chambre ID: {}", id);
+            log.info("Chambre JSON: {}", chambreJson);
+            if (photos != null) {
+                for (MultipartFile photo : photos) {
+                    log.info("Photo name: {}", photo.getOriginalFilename());
+                }
+            }
+
+            Chambre updatedChambre = chambreService.updateChambre(id, chambre, photos);
+
             return new ResponseEntity<>(updatedChambre, HttpStatus.OK);
+
+        } catch (IOException e) {
+            log.error("Error processing JSON: {}", e.getMessage());
+            return ResponseEntity.badRequest().build();
         } catch (RuntimeException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            log.error("Error updating chambre: {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
+
 
     @DeleteMapping("/{id}")
     @Secured(AuthoritiesConstants.ADMIN)

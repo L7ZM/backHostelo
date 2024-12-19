@@ -57,30 +57,29 @@ public class ChambreService {
 		}).orElseThrow(() -> new RuntimeException("Chambre not found with id " + id));
 	}
 	
-	public Chambre updateChambre(Long id, int numeroChambre, TypeChambre type, double prix, String description, List<MultipartFile> photos) {
+	public Chambre updateChambre(Long id, Chambre chambre, List<MultipartFile> photos) {
 	    return chambreRepository.findById(id).map(existingChambre -> {
-	        existingChambre.setNumeroChambre(numeroChambre);
-	        existingChambre.setType(type);
-	        existingChambre.setPrix(prix);
-	        existingChambre.setDescription(description);
+	        existingChambre.setNumeroChambre(chambre.getNumeroChambre());
+	        existingChambre.setType(chambre.getType());
+	        existingChambre.setPrix(chambre.getPrix());
+	        existingChambre.setDescription(chambre.getDescription());
 
 	        if (photos != null && !photos.isEmpty()) {
-	        	List<byte[]> photoBytesList = existingChambre.getPhotos(); 
-//	        	List<byte[]> photoBytesList = new ArrayList<>();
-	            
-	            for (MultipartFile photo : photos) {
-	                try {
+	            try {
+	                List<byte[]> photoBytesList = new ArrayList<>();
+	                for (MultipartFile photo : photos) {
 	                    photoBytesList.add(photo.getBytes());
-	                } catch (IOException e) {
-	                    throw new RuntimeException("Error processing photo upload", e);
 	                }
+	                existingChambre.setPhotos(photoBytesList);
+	            } catch (IOException e) {
+	                throw new RuntimeException("Error processing photo upload", e);
 	            }
-	            existingChambre.setPhotos(photoBytesList);
 	        }
 
 	        return chambreRepository.save(existingChambre);
 	    }).orElseThrow(() -> new RuntimeException("Chambre not found with id " + id));
 	}
+
 
 
 	public byte[] getPhoto(String fileName) throws IOException {
