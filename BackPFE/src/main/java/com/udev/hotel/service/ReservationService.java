@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,6 +16,7 @@ import com.udev.hotel.domain.entity.ReservationServiceAdd;
 import com.udev.hotel.domain.entity.ServiceAdditionnel;
 import com.udev.hotel.domain.entity.User;
 import com.udev.hotel.domain.repository.ChambreRepository;
+import com.udev.hotel.domain.repository.FactureRepository;
 import com.udev.hotel.domain.repository.ReservationRepository;
 import com.udev.hotel.domain.repository.ReservationServiceAddRepository;
 import com.udev.hotel.domain.repository.ServiceAdditionnelRepository;
@@ -34,6 +36,8 @@ public class ReservationService {
 	private final UserRepository userRepository;
 	private final ServiceAdditionnelRepository serviceAdditionnelRepository;
 	private final ReservationServiceAddRepository reservationServiceAddRepository;
+	@Autowired
+	private FactureRepository factureRepository;
 
 	@Transactional
 	public Reservation createReservation(String username, Long chambreId, List<Long> serviceIds, LocalDate dateDebut,
@@ -82,6 +86,7 @@ public class ReservationService {
 		if (currentDate.isAfter(dateDebutMinus48Hours)) {
 			throw new IllegalStateException("Cancellation not allowed within 48 hours of the reservation start date.");
 		}
+        factureRepository.deleteFactureByIdReservation(reservationId);
 		reservationRepository.delete(reservation);
 	}
 

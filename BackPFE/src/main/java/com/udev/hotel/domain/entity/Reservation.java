@@ -19,6 +19,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 
@@ -48,10 +49,6 @@ public class Reservation {
 	@ManyToOne
 	@JoinColumn(name = "chambre_id", nullable = false)
 	private Chambre chambre;
-
-//    @ElementCollection
-//    @Cascade(CascadeType.ALL)
-//    private List<Long> servicesAdditionnels;
 
 	@OneToMany(mappedBy = "reservation", orphanRemoval = true)
 	@Cascade(CascadeType.ALL)

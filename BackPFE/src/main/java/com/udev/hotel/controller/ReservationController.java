@@ -19,7 +19,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.udev.hotel.config.security.AuthoritiesConstants;
+import com.udev.hotel.domain.entity.Facture;
 import com.udev.hotel.domain.entity.Reservation;
+import com.udev.hotel.domain.repository.FactureRepository;
 import com.udev.hotel.domain.repository.ReservationRepository;
 import com.udev.hotel.service.ReservationService;
 import com.udev.hotel.service.dto.ReservationDTO;
@@ -74,7 +76,6 @@ public class ReservationController {
     @Timed
     public ResponseEntity<Void> cancelReservation(@PathVariable Long idReservation) {
     	log.debug("REST request to delete Reservation: {}", idReservation);
-		
     	reservationService.cancelReservation(idReservation);
 		return ResponseEntity.ok().build();
     }
