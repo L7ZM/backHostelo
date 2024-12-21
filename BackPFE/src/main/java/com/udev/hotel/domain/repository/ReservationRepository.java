@@ -10,6 +10,7 @@ import org.springframework.data.repository.query.Param;
 import com.udev.hotel.config.constants.ReservationStatus;
 import com.udev.hotel.domain.entity.Reservation;
 import com.udev.hotel.service.dto.ReservationRequest;
+import com.udev.hotel.service.dto.ReservationResponse;
 
 public interface ReservationRepository extends JpaRepository<Reservation, Long> {
 	List<Reservation> findByStatus(@Param("status") ReservationStatus status);
@@ -22,8 +23,22 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
 	@Query("SELECT r FROM Reservation r WHERE r.user.email = :username")
 	List<Reservation> getReservationsByUsername(@Param("username") String username);
 
-	@Query("SELECT new com.udev.hotel.service.dto.ReservationRequest(r.id ,r.chambre.numeroChambre, r.dateDebut, r.dateFin, r.status) FROM Reservation r ")
-	List<ReservationRequest> getAllreservation();
+	@Query("""
+		    SELECT new com.udev.hotel.service.dto.ReservationResponse(
+		        r.id,
+		        r.user.id,
+		        r.chambre.numeroChambre,
+		        r.user.nom,
+		        r.user.prenom,
+		        r.dateDebut,
+		        r.dateFin,
+		        r.status)
+		    FROM Reservation r
+		""")
+		List<ReservationResponse> getAllreservation();
+	 
+//	@Query("SELECT new com.udev.hotel.service.dto.ReservationRequest(r.id ,r.chambre.numeroChambre, r.dateDebut, r.dateFin, r.status) FROM Reservation r ")
+//	List<ReservationRequest> getAllreservation();
 
 	@Query("SELECT new com.udev.hotel.service.dto.ReservationRequest(r.id ,r.chambre.numeroChambre, r.dateDebut, r.dateFin, r.status) "
 			+ "FROM Reservation r " + "WHERE r.user.email = :username")

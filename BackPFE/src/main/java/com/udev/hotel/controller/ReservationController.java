@@ -26,6 +26,7 @@ import com.udev.hotel.domain.repository.ReservationRepository;
 import com.udev.hotel.service.ReservationService;
 import com.udev.hotel.service.dto.ReservationDTO;
 import com.udev.hotel.service.dto.ReservationRequest;
+import com.udev.hotel.service.dto.ReservationResponse;
 
 import io.micrometer.core.annotation.Timed;
 import lombok.RequiredArgsConstructor;
@@ -59,11 +60,11 @@ public class ReservationController {
     
     @GetMapping
     @Secured(AuthoritiesConstants.ADMIN)
-    public ResponseEntity<List<ReservationRequest>> getAllReservation(){
-    	List<ReservationRequest> reservation = reservationRepository.getAllreservation(); 
+    public ResponseEntity<List<ReservationResponse>> getAllReservation(){
+    	List<ReservationResponse> reservation = reservationRepository.getAllreservation(); 
 		return new ResponseEntity<>(reservation, HttpStatus.OK);
     }
-        
+      
     @GetMapping("/myBooking")
     @Timed
     public ResponseEntity<List<ReservationRequest>> getReservationsByUserId() {

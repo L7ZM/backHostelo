@@ -22,6 +22,7 @@ import com.udev.hotel.domain.repository.ReservationServiceAddRepository;
 import com.udev.hotel.domain.repository.ServiceAdditionnelRepository;
 import com.udev.hotel.domain.repository.UserRepository;
 import com.udev.hotel.service.dto.ReservationRequest;
+import com.udev.hotel.service.dto.ReservationResponse;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -90,10 +91,10 @@ public class ReservationService {
 		reservationRepository.delete(reservation);
 	}
 
-	public List<Reservation> getAllReservation() {
-		return reservationRepository.findAll();
+	public List<ReservationResponse> getAllreservation() {
+		return reservationRepository.getAllreservation();
 	}
-
+	
 	@Transactional
 	public List<ReservationRequest> getReservationsByUsername(String username) {
 
