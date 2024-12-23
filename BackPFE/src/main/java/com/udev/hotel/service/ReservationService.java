@@ -85,7 +85,7 @@ public class ReservationService {
 	public void cancelReservation(Long reservationId) {
     	String currentUsername = SecurityContextHolder.getContext().getAuthentication().getName();
     	User user = userRepository.findByEmail(currentUsername)
-				.orElseThrow(() -> new IllegalArgumentException("Reservation introuvable."));
+				.orElseThrow(() -> new IllegalArgumentException("User introuvable."));
     	int currentPoints = user.getPointsFidelite(); 
 		Reservation reservation = reservationRepository.findById(reservationId)
 				.orElseThrow(() -> new IllegalArgumentException("Reservation introuvable."));
