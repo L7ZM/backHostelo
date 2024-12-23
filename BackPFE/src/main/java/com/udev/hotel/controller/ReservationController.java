@@ -16,11 +16,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.udev.hotel.config.security.AuthoritiesConstants;
 import com.udev.hotel.domain.entity.Facture;
 import com.udev.hotel.domain.entity.Reservation;
+import com.udev.hotel.domain.entity.ServiceAdditionnel;
 import com.udev.hotel.domain.repository.FactureRepository;
 import com.udev.hotel.domain.repository.ReservationRepository;
 import com.udev.hotel.service.ReservationService;
@@ -39,56 +41,64 @@ public class ReservationController {
 	private final Logger log = LoggerFactory.getLogger(ReservationController.class);
 
 	@Autowired
-    private ReservationService reservationService;
+	private ReservationService reservationService;
 	@Autowired
 	private ReservationRepository reservationRepository;
-	
-    @PostMapping
-    @Secured({AuthoritiesConstants.USER , AuthoritiesConstants.ADMIN})
-    public ResponseEntity<Reservation> reserver(@RequestBody ReservationDTO request) {
-    	String currentUsername = SecurityContextHolder.getContext().getAuthentication().getName();
-        log.info(currentUsername);
-        Reservation reservation = reservationService.createReservation(
-                currentUsername,
-                request.getChambreId(),
-                request.getServiceIds(),
-                request.getDateDebut(),
-                request.getDateFin()
-        );
-        return ResponseEntity.status(HttpStatus.CREATED).body(reservation);
-    }
-    
-    @GetMapping
-    @Secured(AuthoritiesConstants.ADMIN)
-    public ResponseEntity<List<ReservationResponse>> getAllReservation(){
-    	List<ReservationResponse> reservation = reservationRepository.getAllreservation(); 
-		return new ResponseEntity<>(reservation, HttpStatus.OK);
-    }
-      
+
+	@PostMapping
+	@Secured({ AuthoritiesConstants.USER, AuthoritiesConstants.ADMIN })
+	public ResponseEntity<Reservation> reserver(@RequestBody ReservationDTO request) {
+		String currentUsername = SecurityContextHolder.getContext().getAuthentication().getName();
+		log.info(currentUsername);
+		Reservation reservation = reservationService.createReservation(currentUsername, request.getChambreId(),
+				request.getServiceIds(), request.getDateDebut(), request.getDateFin());
+		return ResponseEntity.status(HttpStatus.CREATED).body(reservation);
+	}
+   
+	@GetMapping
+	@Secured(AuthoritiesConstants.ADMIN)
+	public List<ReservationResponse> getAllReservations() {
+		return reservationService.getAllReservations();
+	}
+
     @GetMapping("/myBooking")
     @Timed
-    public ResponseEntity<List<ReservationRequest>> getReservationsByUserId() {
+    public ResponseEntity<List<ReservationResponse>> getReservationsByUserId() {
     	String currentUsername = SecurityContextHolder.getContext().getAuthentication().getName();
-        List<ReservationRequest> reservations = reservationService.getReservationsByUsername(currentUsername);
+        List<ReservationResponse> reservations = reservationService.getReservationsByUsername(currentUsername);
         return ResponseEntity.ok(reservations);
     }
-    
-    @DeleteMapping("/{idReservation}")
-    @Timed
-    public ResponseEntity<Void> cancelReservation(@PathVariable Long idReservation) {
-    	log.debug("REST request to delete Reservation: {}", idReservation);
-    	reservationService.cancelReservation(idReservation);
-		return ResponseEntity.ok().build();
-    }
-    
-    @PutMapping("/{id}/validate")
+
+	@DeleteMapping("/{idReservation}/{username}")
+	@Timed
 	@Secured(AuthoritiesConstants.ADMIN)
-    public ResponseEntity<String> validateReservation(@PathVariable Long id) {
-        reservationService.validateReservation(id);
-        return ResponseEntity.ok("Reservation has been confirmed successfully.");
-    }
-    
-    
- 
+	public ResponseEntity<Void> cancelReservation(@PathVariable Long idReservation , @PathVariable String username) {
+		log.debug("REST request to delete Reservation: {} , for user : {}", idReservation , username);
+		reservationService.cancelReservationByAdmin(idReservation , username);
+		return ResponseEntity.ok().build();
+	}
+	
+	@DeleteMapping("/{idReservation}")
+	@Timed
+	public ResponseEntity<Void> cancelReservation(@PathVariable Long idReservation) {
+		log.debug("REST request to delete Reservation: {} , for user : {}", idReservation );
+		reservationService.cancelReservation(idReservation );
+		return ResponseEntity.ok().build();
+	}
+
+
+	@PutMapping("/{id}/validate")
+	@Secured(AuthoritiesConstants.ADMIN)
+	public ResponseEntity<String> validateReservation(@PathVariable Long id) {
+		reservationService.validateReservation(id);
+		return ResponseEntity.ok("Reservation has been confirmed successfully.");
+	}
+
+	@GetMapping("/serviceAdd")
+	public ResponseEntity<List<String>> getServicesByUser() {
+		String currentUsername = SecurityContextHolder.getContext().getAuthentication().getName();
+		List<String> services = reservationService.getServicesByUserEmail(currentUsername);
+		return ResponseEntity.ok(services);
+	}
 
 }
