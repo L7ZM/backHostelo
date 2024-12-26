@@ -21,6 +21,8 @@ public class LoginResponse {
 	private String adresse;
 	private String telephone;
 	private List<String> roles;
+	private int pointsFidelite;
+	
 
 	public Long getId() {
 		return id;
@@ -120,5 +122,16 @@ public class LoginResponse {
 		this.prenom = prenom;
 		return this;
 	}
+
+	public int getPointsFidelite() {
+		return pointsFidelite;
+	}
+
+	public LoginResponse setPointsFidelite(int pointsFidelite) {
+		this.pointsFidelite = pointsFidelite;
+		return this;
+	}
+	
+	
 
 }
