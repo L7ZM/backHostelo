@@ -67,7 +67,8 @@ public class AuthenticationController {
                 .setAdresse(authenticatedUser.getAdresse())
                 .setDateNaissance(authenticatedUser.getDateNaissance())
                 .setTelephone(authenticatedUser.getTelephone())
-                .setRoles(roles);
+                .setRoles(roles)
+        		.setPointsFidelite(authenticatedUser.getPointsFidelite());
         log.info(authenticatedUser.getUsername());
         return ResponseEntity.ok(loginResponse);
     }
