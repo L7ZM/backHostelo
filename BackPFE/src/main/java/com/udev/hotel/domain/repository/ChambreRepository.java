@@ -1,5 +1,6 @@
 package com.udev.hotel.domain.repository;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -10,6 +11,7 @@ import org.springframework.data.repository.query.Param;
 import com.udev.hotel.config.constants.EtatChambre;
 import com.udev.hotel.config.constants.TypeChambre;
 import com.udev.hotel.domain.entity.Chambre;
+import com.udev.hotel.service.dto.ChambreDTO;
 
 public interface ChambreRepository extends JpaRepository<Chambre, Long> {
 	List<Chambre> findByType(TypeChambre type);
@@ -22,4 +24,15 @@ public interface ChambreRepository extends JpaRepository<Chambre, Long> {
 
 	@Query("SELECT c FROM Chambre c LEFT JOIN FETCH c.photos WHERE c.id = :id")
 	Optional<Chambre> findByIdWithPhotos(@Param("id") Long id);
+
+	@Query("""
+			    SELECT c
+			    FROM Chambre c
+			    WHERE c.id NOT IN (
+			        SELECT r.chambre.id
+			        FROM Reservation r
+			        WHERE r.dateDebut <= :dateFin AND r.dateFin >= :dateStart
+			    )
+			""")
+	List<Chambre> findAvailableRooms(@Param("dateStart") LocalDate dateStart, @Param("dateFin") LocalDate dateFin);
 }

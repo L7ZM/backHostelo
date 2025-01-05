@@ -42,9 +42,7 @@ public class ReservationController {
 
 	@Autowired
 	private ReservationService reservationService;
-	@Autowired
-	private ReservationRepository reservationRepository;
-
+	
 	@PostMapping
 	@Secured({ AuthoritiesConstants.USER, AuthoritiesConstants.ADMIN })
 	public ResponseEntity<Reservation> reserver(@RequestBody ReservationDTO request) {

@@ -1,13 +1,13 @@
 package com.udev.hotel.controller;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.time.LocalDate;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.aot.hint.TypeReference;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -25,7 +24,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.udev.hotel.config.constants.TypeChambre;
 import com.udev.hotel.config.security.AuthoritiesConstants;
 import com.udev.hotel.domain.entity.Chambre;
 import com.udev.hotel.service.ChambreService;
@@ -133,4 +131,14 @@ public class ChambreController {
         List<Chambre> chambres = chambreService.getAvailableChambres();
         return new ResponseEntity<>(chambres, HttpStatus.OK);
     }
+    
+    @GetMapping("/available")
+    public ResponseEntity<List<Chambre>> getAvailableChambres(
+        @RequestParam("dateStart") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dateStart,
+        @RequestParam("dateFin") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dateFin
+    ) {
+        List<Chambre> chambres = chambreService.getAvailableChambres(dateStart, dateFin);
+        return new ResponseEntity<>(chambres, HttpStatus.OK);
+    }
+    
 }

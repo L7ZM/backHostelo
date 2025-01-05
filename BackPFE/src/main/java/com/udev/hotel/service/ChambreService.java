@@ -4,9 +4,11 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,9 +17,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.udev.hotel.config.constants.EtatChambre;
-import com.udev.hotel.config.constants.TypeChambre;
 import com.udev.hotel.domain.entity.Chambre;
 import com.udev.hotel.domain.repository.ChambreRepository;
+import com.udev.hotel.service.dto.ChambreDTO;
 
 @Service
 public class ChambreService {
@@ -56,31 +58,29 @@ public class ChambreService {
 			return chambreRepository.save(existingChambre);
 		}).orElseThrow(() -> new RuntimeException("Chambre not found with id " + id));
 	}
-	
+
 	public Chambre updateChambre(Long id, Chambre chambre, List<MultipartFile> photos) {
-	    return chambreRepository.findById(id).map(existingChambre -> {
-	        existingChambre.setNumeroChambre(chambre.getNumeroChambre());
-	        existingChambre.setType(chambre.getType());
-	        existingChambre.setPrix(chambre.getPrix());
-	        existingChambre.setDescription(chambre.getDescription());
+		return chambreRepository.findById(id).map(existingChambre -> {
+			existingChambre.setNumeroChambre(chambre.getNumeroChambre());
+			existingChambre.setType(chambre.getType());
+			existingChambre.setPrix(chambre.getPrix());
+			existingChambre.setDescription(chambre.getDescription());
 
-	        if (photos != null && !photos.isEmpty()) {
-	            try {
-	                List<byte[]> photoBytesList = new ArrayList<>();
-	                for (MultipartFile photo : photos) {
-	                    photoBytesList.add(photo.getBytes());
-	                }
-	                existingChambre.setPhotos(photoBytesList);
-	            } catch (IOException e) {
-	                throw new RuntimeException("Error processing photo upload", e);
-	            }
-	        }
+			if (photos != null && !photos.isEmpty()) {
+				try {
+					List<byte[]> photoBytesList = new ArrayList<>();
+					for (MultipartFile photo : photos) {
+						photoBytesList.add(photo.getBytes());
+					}
+					existingChambre.setPhotos(photoBytesList);
+				} catch (IOException e) {
+					throw new RuntimeException("Error processing photo upload", e);
+				}
+			}
 
-	        return chambreRepository.save(existingChambre);
-	    }).orElseThrow(() -> new RuntimeException("Chambre not found with id " + id));
+			return chambreRepository.save(existingChambre);
+		}).orElseThrow(() -> new RuntimeException("Chambre not found with id " + id));
 	}
-
-
 
 	public byte[] getPhoto(String fileName) throws IOException {
 		Path filePath = Paths.get(uploadDir + fileName);
@@ -93,6 +93,10 @@ public class ChambreService {
 
 	public List<Chambre> getAvailableChambres() {
 		return chambreRepository.findByEtat(EtatChambre.DISPONIBLE);
+	}
+
+	public List<Chambre> getAvailableChambres(LocalDate dateStart, LocalDate dateFin) {
+		return chambreRepository.findAvailableRooms(dateStart, dateFin);
 	}
 
 }

@@ -2,6 +2,7 @@ package com.udev.hotel.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.udev.hotel.domain.entity.Facture;
 import com.udev.hotel.service.FactureService;
 
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -29,4 +31,9 @@ public class FactureController {
 	        Facture facture = factureService.payerFacture(factureId);
 	        return ResponseEntity.ok(facture);
 	    }
+	    
+	    @GetMapping("/{factureId}/report")
+		public void generateFactureReport(@PathVariable Long factureId, HttpServletResponse response) throws Exception {
+			factureService.generateFactureReport(factureId, response);
+		}
 }

@@ -23,10 +23,6 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
 	@Query("SELECT r FROM Reservation r WHERE r.user.email = :username")
 	List<Reservation> getReservationsByUsername(@Param("username") String username);
 
-//	@Query("SELECT new com.udev.hotel.service.dto.ReservationRequest(r.id ,r.chambre.numeroChambre, r.dateDebut, r.dateFin, r.status) "
-//			+ "FROM Reservation r " + "WHERE r.user.email = :username")
-//	List<ReservationRequest> ReservationsByUsername(@Param("username") String username);
-
 	@Query(value = """
 		    SELECT r.id AS id,
 		           r.user_id AS idUser,

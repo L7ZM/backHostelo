@@ -121,48 +121,6 @@ public class UserService {
 		});
 	}
 
-	/**
-	 * Update all information for a specific user, and return the modified user.
-	 *
-	 * @param userDTO user to update
-	 * @return updated user
-	 */
-//	public Optional<UserDTO> updateUser(UserDTO userDTO) {
-//		return userRepository.findById(userDTO.getId()).map(user -> {
-//			user.setEmail(userDTO.getEmail().toLowerCase());
-//			user.setPrenom(userDTO.getPrenom());
-//			user.setNom(userDTO.getNom());
-//			user.setAdresse(userDTO.getAdresse());
-//			user.setTelephone(userDTO.getTelephone());
-//			user.setDateNaissance(userDTO.getDateNaissance());
-//			if (userDTO.getPassword() != null) {
-//				String encryptedPassword = passwordEncoder.encode(userDTO.getPassword());
-//				log.debug(encryptedPassword);
-//				user.setPassword(encryptedPassword);
-//			} else {
-//				throw new IllegalArgumentException("Password cannot be null");
-//			}
-//			Set<Role> authorities = userDTO.getAuthorities().stream().map(roleRepository::findByName)
-//					.filter(Optional::isPresent).map(Optional::get).collect(Collectors.toSet());
-//			user.setRoles(authorities);
-//			userRepository.save(user);
-//			log.debug("Updated User: {}", user);
-//			return new UserDTO(user);
-//		});
-//	}
-
-//	public void updatePassword(String newPassword) {
-//		User currentUser = getCurrentUser();
-//		log.info(currentUser.toString());
-//		if (currentUser.getPassword() != null) {
-//			String encodedNewPassword = passwordEncoder.encode(newPassword);
-//			log.debug(encodedNewPassword);
-//			currentUser.setPassword(encodedNewPassword);
-//		} else {
-//			throw new IllegalArgumentException("Password cannot be null");
-//		}
-//		userRepository.save(currentUser);
-//	}
 
 	private User getCurrentUser() {
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();

@@ -14,7 +14,7 @@ public class ChambreDTO {
     private TypeChambre type;
     private double prix;
     private String description;
-    private List<String> photos; // Base64 encoded strings
+    private List<String> photos;
 
     public ChambreDTO(Chambre chambre) {
         this.id = chambre.getId();
@@ -27,7 +27,7 @@ public class ChambreDTO {
                              .map(photo -> "data:image/jpeg;base64," + Base64.getEncoder().encodeToString(photo))
                              .collect(Collectors.toList());
     }
-
+    
 	public Long getId() {
 		return id;
 	}

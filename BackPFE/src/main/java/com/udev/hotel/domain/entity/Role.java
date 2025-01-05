@@ -20,6 +20,16 @@ public class Role implements Serializable {
 	@Column(length = 50)
 	private String name;
 
+	
+	public Role() {
+		super();
+	}
+
+	public Role(String name) {
+		super();
+		this.name = name;
+	}
+
 	public String getName() {
 		return name;
 	}

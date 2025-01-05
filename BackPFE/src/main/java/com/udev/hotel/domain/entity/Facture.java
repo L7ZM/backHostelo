@@ -2,6 +2,7 @@ package com.udev.hotel.domain.entity;
 
 import java.time.LocalDate;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.udev.hotel.config.constants.PaimentStatus;
 
 import jakarta.persistence.Column;
@@ -37,6 +38,7 @@ public class Facture {
 
     @OneToOne
     @JoinColumn(name = "reservation_id", unique = true)
+    @JsonIgnore
     private Reservation reservation;
 
     public Facture() {
