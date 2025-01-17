@@ -67,6 +67,7 @@ public class ReservationService {
 		reservation.setDateDebut(dateDebut);
 		reservation.setDateFin(dateFin);
 		reservation.setStatus(ReservationStatus.EN_ATTENTE);
+		reservation.setUsePoints(usePoints);
 		Reservation savedReservation = reservationRepository.save(reservation);
 
 		if (serviceIds != null && !serviceIds.isEmpty()) {
