@@ -38,8 +38,7 @@ public class Reservation {
 	@Column(name = "date_fin", nullable = false)
 	private LocalDate dateFin;
 	
-	@NotNull
-	@Column(name = "usePoints", nullable = false)
+	@Column(name = "usePoints")
 	private Boolean usePoints;
 	
 	@Enumerated(EnumType.STRING)

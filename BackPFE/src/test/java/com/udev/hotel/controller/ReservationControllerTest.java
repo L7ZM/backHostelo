@@ -61,10 +61,10 @@ class ReservationControllerTest {
     	List<ReservationResponse> mockReservation = List.of(
     			new ReservationResponse(1L, 1L, 120, "elhassani", "anas", 
     					LocalDate.of(2025, 12, 10), LocalDate.of(2025, 12, 12), 
-    					ReservationStatus.EN_ATTENTE, Arrays.asList("Spa", "Breakfast")),
+    					ReservationStatus.EN_ATTENTE,true, Arrays.asList("Spa", "Breakfast")),
     			new ReservationResponse(2L, 2L, 130, "elkhalifi", "houssam", 
     					LocalDate.of(2025, 12, 10), LocalDate.of(2025, 12, 12), 
-    					ReservationStatus.CONFIRMEE, Arrays.asList("Football", "Tennis"))
+    					ReservationStatus.CONFIRMEE,true, Arrays.asList("Football", "Tennis"))
     			);
         when(reservationService.getAllReservations()).thenReturn(mockReservation);
     	//when & then
@@ -86,7 +86,7 @@ class ReservationControllerTest {
     	  ReservationResponse reservation = new ReservationResponse(
                   1L, 101L, 101, "elhassani", "Anas", 
                   LocalDate.of(2024, 1, 1), LocalDate.of(2024, 1, 10), 
-                  ReservationStatus.CONFIRMEE, Arrays.asList("Foot")
+                  ReservationStatus.CONFIRMEE,true, Arrays.asList("Foot")
           );
           when(reservationService.getReservationsByUsername("anas@gmail.com")).thenReturn(Arrays.asList(reservation));
 

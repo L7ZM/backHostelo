@@ -166,11 +166,7 @@ public class AdminController {
 				.body(newServiceAdd);
 	}
 	
-	/**
-	 * GET /users : get all users.
-	 * 
-	 * @return the ResponseEntity with status 200 (OK) and with body all users
-	 */
+	
 	@GetMapping("/serviceAdditionnel")
 	@Timed
 	public ResponseEntity<List<ServiceAdditionnel>> getAllServiceAdditionnel() {

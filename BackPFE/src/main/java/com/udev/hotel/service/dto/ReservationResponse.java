@@ -17,9 +17,10 @@ public class ReservationResponse {
     private LocalDate dateDebut;
     private LocalDate dateFin;
     private ReservationStatus status;
+    private boolean usePoints;
     private List<String> services;
     public ReservationResponse(Long id, Long idUser, int numeroChambre, String nom, String prenom, 
-            LocalDate dateDebut, LocalDate dateFin, ReservationStatus status,List<String> services) {
+            LocalDate dateDebut, LocalDate dateFin, ReservationStatus status,boolean usePoints,List<String> services) {
 		super();
 		this.id = id;
 		this.idUser = idUser;
@@ -29,6 +30,7 @@ public class ReservationResponse {
 		this.dateDebut = dateDebut;
 		this.dateFin = dateFin;
 		this.status = status;
+		this.usePoints = usePoints;
 		this.services = services  != null ? services : new ArrayList<>();;
 	}
 

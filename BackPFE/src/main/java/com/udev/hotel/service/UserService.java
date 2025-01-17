@@ -2,6 +2,7 @@ package com.udev.hotel.service;
 
 import java.time.LocalDate;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -18,8 +19,10 @@ import com.udev.hotel.config.security.AuthoritiesConstants;
 import com.udev.hotel.config.security.SecurityUtils;
 import com.udev.hotel.controller.exceptionHandler.EmailAlreadyUsedException;
 import com.udev.hotel.domain.entity.Role;
+import com.udev.hotel.domain.entity.ServiceAdditionnel;
 import com.udev.hotel.domain.entity.User;
 import com.udev.hotel.domain.repository.RoleRepository;
+import com.udev.hotel.domain.repository.ServiceAdditionnelRepository;
 import com.udev.hotel.domain.repository.UserRepository;
 import com.udev.hotel.service.dto.UserDTO;
 
@@ -32,6 +35,8 @@ public class UserService {
 	private final UserRepository userRepository;
 	private final RoleRepository roleRepository;
 	private final PasswordEncoder passwordEncoder;
+	@Autowired
+	private ServiceAdditionnelRepository serviceAddRepo;
 
 	@Autowired
 	public UserService(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
@@ -121,6 +126,10 @@ public class UserService {
 		});
 	}
 
+	public List<ServiceAdditionnel> getAllService(){
+		return serviceAddRepo.findAll();
+	}
+	
 
 	private User getCurrentUser() {
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();

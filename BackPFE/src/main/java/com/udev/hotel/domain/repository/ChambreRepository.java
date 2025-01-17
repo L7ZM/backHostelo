@@ -35,4 +35,7 @@ public interface ChambreRepository extends JpaRepository<Chambre, Long> {
 			    )
 			""")
 	List<Chambre> findAvailableRooms(@Param("dateStart") LocalDate dateStart, @Param("dateFin") LocalDate dateFin);
+	
+	@Query("SELECT c FROM Chambre c where c.etat = 'DISPONIBLE' ")
+	List<Chambre> getAllDisponibleRooms();
 }

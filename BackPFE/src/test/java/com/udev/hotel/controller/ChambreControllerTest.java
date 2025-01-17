@@ -51,7 +51,7 @@ class ChambreControllerTest {
         // Given
         List<Chambre> mockChambres = List.of(
                 new Chambre(101, EtatChambre.DISPONIBLE, TypeChambre.SINGLE, 100.0, "Single Room", new ArrayList<>()),
-                new Chambre(102, EtatChambre.OCCUPEE, TypeChambre.DELUXE, 200.0, "Deluxe Room", new ArrayList<>())
+                new Chambre(102, EtatChambre.EN_ENTRETIEN, TypeChambre.DELUXE, 200.0, "Deluxe Room", new ArrayList<>())
         );
         when(chambreService.getAllChambres()).thenReturn(mockChambres);
 

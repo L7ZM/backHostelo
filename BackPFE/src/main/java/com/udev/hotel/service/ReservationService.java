@@ -143,16 +143,16 @@ public class ReservationService {
 	        LocalDate dateDebut = row[5] != null ? LocalDate.parse(row[5].toString()) : null;
 	        LocalDate dateFin = row[6] != null ? LocalDate.parse(row[6].toString()) : null;
 	        ReservationStatus status = row[7] != null ? ReservationStatus.valueOf((String) row[7]) : null;
-
+	        boolean usePoints = row[8] != null && (Boolean) row[8];
 	        List<String> services;
-	        if (row[8] != null && row[8] instanceof String[]) {
-	            String[] serviceArray = (String[]) row[8];
+	        if (row[9] != null && row[9] instanceof String[]) {
+	            String[] serviceArray = (String[]) row[9];
 	            services = serviceArray.length > 0 ? List.of(serviceArray) : List.of("pas de service add");
 	        } else {
 	            services = List.of("pas de service add");
 	        }
 	        reservations.add(
-	            new ReservationResponse(id, idUser, numeroChambre, nom, prenom, dateDebut, dateFin, status, services)
+	            new ReservationResponse(id, idUser, numeroChambre, nom, prenom, dateDebut, dateFin, status,usePoints, services)
 	        );
 	    }
 
@@ -173,16 +173,17 @@ public class ReservationService {
 		        LocalDate dateDebut = row[5] != null ? LocalDate.parse(row[5].toString()) : null;
 		        LocalDate dateFin = row[6] != null ? LocalDate.parse(row[6].toString()) : null;
 		        ReservationStatus status = row[7] != null ? ReservationStatus.valueOf((String) row[7]) : null;
-
+		        boolean usePoints = row[8] != null && (Boolean) row[8];
+		        
 		        List<String> services;
-		        if (row[8] != null && row[8] instanceof String[]) {
-		            String[] serviceArray = (String[]) row[8];
+		        if (row[9] != null && row[9] instanceof String[]) {
+		            String[] serviceArray = (String[]) row[9];
 		            services = serviceArray.length > 0 ? List.of(serviceArray) : List.of("pas de service add");
 		        } else {
 		            services = List.of("pas de service add");
 		        }
 		        reservations.add(
-		            new ReservationResponse(id, idUser, numeroChambre, nom, prenom, dateDebut, dateFin, status, services)
+		            new ReservationResponse(id, idUser, numeroChambre, nom, prenom, dateDebut, dateFin, status,usePoints, services)
 		        );
 		    }
 
