@@ -11,6 +11,7 @@ public class ReservationRequest {
 	private LocalDate dateDebut;
 	private LocalDate dateFin;
 	private ReservationStatus status;
+	private Boolean usePoints;
 
 	public Long getId() {
 		return id;
@@ -42,14 +43,23 @@ public class ReservationRequest {
 	public void setStatus(ReservationStatus status) {
 		this.status = status;
 	}
+	
+	
+	public Boolean getUsePoints() {
+		return usePoints;
+	}
+	public void setUsePoints(Boolean usePoints) {
+		this.usePoints = usePoints;
+	}
 	public ReservationRequest(Long id, int numeroChambre, LocalDate dateDebut, LocalDate dateFin,
-			ReservationStatus status) {
+			ReservationStatus status, Boolean usePoints) {
 		super();
 		this.id = id;
 		this.numeroChambre = numeroChambre;
 		this.dateDebut = dateDebut;
 		this.dateFin = dateFin;
 		this.status = status;
+		this.usePoints = usePoints;
 	}
 	
 	

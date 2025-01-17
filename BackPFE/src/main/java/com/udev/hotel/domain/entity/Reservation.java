@@ -37,7 +37,11 @@ public class Reservation {
 	@NotNull
 	@Column(name = "date_fin", nullable = false)
 	private LocalDate dateFin;
-
+	
+	@NotNull
+	@Column(name = "usePoints", nullable = false)
+	private Boolean usePoints;
+	
 	@Enumerated(EnumType.STRING)
 	@Column(name = "status", nullable = false)
 	private ReservationStatus status;
@@ -54,6 +58,7 @@ public class Reservation {
 	@Cascade(CascadeType.ALL)
 	private List<ReservationServiceAdd> reservationServiceAdds = new ArrayList<>();
 
+	
 	public LocalDate getDateDebut() {
 		return dateDebut;
 	}
@@ -68,6 +73,15 @@ public class Reservation {
 
 	public void setDateFin(LocalDate dateFin) {
 		this.dateFin = dateFin;
+	}
+
+	
+	public Boolean getUsePoints() {
+		return usePoints;
+	}
+
+	public void setUsePoints(Boolean usePoints) {
+		this.usePoints = usePoints;
 	}
 
 	public User getUser() {

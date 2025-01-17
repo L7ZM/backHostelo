@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.jfree.util.Log;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
@@ -34,7 +35,7 @@ public class FactureService {
 	public Facture genererFacture(Long reservationId) {
 		Reservation reservation = reservationRepository.findById(reservationId)
 				.orElseThrow(() -> new IllegalArgumentException("Réservation introuvable."));
-		
+	
 		double montantTotal = calculerMontantTotal(reservation);
 
 		Facture facture = new Facture();
@@ -58,12 +59,19 @@ public class FactureService {
 		double montantChambre = reservation.getChambre().getPrix();
 		double numberOfNights = ChronoUnit.DAYS.between(reservation.getDateDebut(), reservation.getDateFin());
 		double pricePerNumberOfNights = (ChronoUnit.DAYS.between(reservation.getDateDebut(), reservation.getDateFin())) * montantChambre;
-
+		Boolean usePoints = reservation.getUsePoints();
 		List<ReservationServiceAdd> services = reservationServiceAddRepository.findByReservation(reservation);
 		double montantServices = (services.stream().mapToDouble(service -> service.getServiceAdditionnel().getPrix())
 				.sum()) * numberOfNights;
 
-		return pricePerNumberOfNights + montantServices;
+		double sumOfReservation = pricePerNumberOfNights + montantServices;
+		Log.info(sumOfReservation);
+		if(usePoints) {
+			return sumOfReservation/2;
+		}else {
+			
+			return sumOfReservation;
+		}
 	}
 	
 

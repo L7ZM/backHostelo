@@ -45,7 +45,7 @@ public class ReservationService {
 
 	@Transactional
 	public Reservation createReservation(String username, Long chambreId, List<Long> serviceIds, LocalDate dateDebut,
-			LocalDate dateFin) {
+			LocalDate dateFin , Boolean usePoints) {
 		Chambre chambre = chambreRepository.findById(chambreId)
 				.orElseThrow(() -> new IllegalArgumentException("La chambre spécifiée est introuvable."));
 

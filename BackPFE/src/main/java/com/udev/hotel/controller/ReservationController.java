@@ -49,7 +49,7 @@ public class ReservationController {
 		String currentUsername = SecurityContextHolder.getContext().getAuthentication().getName();
 		log.info(currentUsername);
 		Reservation reservation = reservationService.createReservation(currentUsername, request.getChambreId(),
-				request.getServiceIds(), request.getDateDebut(), request.getDateFin());
+				request.getServiceIds(), request.getDateDebut(), request.getDateFin(), request.getUsePoints());
 		return ResponseEntity.status(HttpStatus.CREATED).body(reservation);
 	}
    

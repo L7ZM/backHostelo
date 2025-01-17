@@ -12,4 +12,5 @@ public class ReservationDTO {
 	private List<Long> serviceIds;
 	private LocalDate dateDebut;
 	private LocalDate dateFin;
+	private Boolean usePoints;
 }
