@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.udev.hotel.domain.entity.Facture;
 import com.udev.hotel.service.FactureService;
+import com.udev.hotel.service.dto.FactureDTO;
 
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -25,12 +26,19 @@ public class FactureController {
 	        Facture facture = factureService.genererFacture(reservationId);
 	        return ResponseEntity.status(HttpStatus.CREATED).body(facture);
 	    }
+	    
+	    @GetMapping("/reservation/{reservationId}")
+	    public ResponseEntity<FactureDTO> getFactureByReservation(@PathVariable Long reservationId) {
+	        FactureDTO factureDTO = factureService.getFactureByReservation(reservationId);
+	        return ResponseEntity.ok(factureDTO);
+	    }
 
 	    @PostMapping("/payer/{factureId}")
 	    public ResponseEntity<Facture> payerFacture(@PathVariable Long factureId) {
 	        Facture facture = factureService.payerFacture(factureId);
 	        return ResponseEntity.ok(facture);
 	    }
+	    
 	    
 	    @GetMapping("/{factureId}/report")
 		public void generateFactureReport(@PathVariable Long factureId, HttpServletResponse response) throws Exception {

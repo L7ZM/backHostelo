@@ -60,6 +60,10 @@ public class ReservationService {
 		if(user != null) {
 			int currentPoints = user.getPointsFidelite();
 			user.setPointsFidelite(currentPoints +10);
+		} 
+		if(usePoints) {
+			int currentPoints = user.getPointsFidelite();
+			user.setPointsFidelite(currentPoints - 50);
 		}
 		Reservation reservation = new Reservation();
 		reservation.setUser(user);
@@ -95,7 +99,7 @@ public class ReservationService {
 		LocalDate dateDebutMinus48Hours = reservation.getDateDebut().minusDays(2);
 
 		if (currentDate.isAfter(dateDebutMinus48Hours)) {
-			log.info("Cancellation not allowed within 48 hours of the reservation start date, if you continue you're fielity point decreased by 10points");
+			log.info("Cancellation not allowed within 48 hours of the reservation start date, if you continue you're fidelity point decreased by 5 points");
 			
 	        user.setPointsFidelite(currentPoints - 5); 
 	        userRepository.save(user);

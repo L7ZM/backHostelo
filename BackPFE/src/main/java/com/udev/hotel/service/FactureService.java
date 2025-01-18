@@ -17,7 +17,9 @@ import com.udev.hotel.domain.entity.ReservationServiceAdd;
 import com.udev.hotel.domain.repository.FactureRepository;
 import com.udev.hotel.domain.repository.ReservationRepository;
 import com.udev.hotel.domain.repository.ReservationServiceAddRepository;
+import com.udev.hotel.service.dto.FactureDTO;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import net.sf.jasperreports.engine.JasperExportManager;
@@ -46,6 +48,11 @@ public class FactureService {
 
 		return factureRepository.save(facture);
 	}
+	
+	public FactureDTO getFactureByReservation(Long reservationId) {
+        return factureRepository.getFactureByReservationId(reservationId)
+            .orElseThrow(() -> new EntityNotFoundException("Facture not found for Reservation ID: " + reservationId));
+    }
 
 	public Facture payerFacture(Long factureId) {
 		Facture facture = factureRepository.findById(factureId)
@@ -109,4 +116,6 @@ public class FactureService {
 		response.setHeader("Content-Disposition", "attachment; filename=facture_" + factureId + ".pdf");
 		JasperExportManager.exportReportToPdfStream(jasperPrint, response.getOutputStream());
 	}
+	
+	
 }

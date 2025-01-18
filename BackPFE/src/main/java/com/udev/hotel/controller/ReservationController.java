@@ -1,6 +1,8 @@
 package com.udev.hotel.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,18 +18,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.udev.hotel.config.security.AuthoritiesConstants;
-import com.udev.hotel.domain.entity.Facture;
 import com.udev.hotel.domain.entity.Reservation;
-import com.udev.hotel.domain.entity.ServiceAdditionnel;
-import com.udev.hotel.domain.repository.FactureRepository;
-import com.udev.hotel.domain.repository.ReservationRepository;
 import com.udev.hotel.service.ReservationService;
 import com.udev.hotel.service.dto.ReservationDTO;
-import com.udev.hotel.service.dto.ReservationRequest;
 import com.udev.hotel.service.dto.ReservationResponse;
 
 import io.micrometer.core.annotation.Timed;
@@ -85,13 +81,22 @@ public class ReservationController {
 	}
 
 
+//	@PutMapping("/{id}/validate")
+//	@Secured(AuthoritiesConstants.ADMIN)
+//	public ResponseEntity<String> validateReservation(@PathVariable Long id) {
+//		reservationService.validateReservation(id);
+//		return ResponseEntity.ok("Reservation has been confirmed successfully.");
+//	}
+
 	@PutMapping("/{id}/validate")
 	@Secured(AuthoritiesConstants.ADMIN)
-	public ResponseEntity<String> validateReservation(@PathVariable Long id) {
-		reservationService.validateReservation(id);
-		return ResponseEntity.ok("Reservation has been confirmed successfully.");
+	public ResponseEntity<Map<String, String>> validateReservation(@PathVariable Long id) {
+	    reservationService.validateReservation(id);
+	    Map<String, String> response = new HashMap<>();
+	    response.put("message", "Reservation has been confirmed successfully.");
+	    return ResponseEntity.ok(response);
 	}
-
+	
 	@GetMapping("/serviceAdd")
 	public ResponseEntity<List<String>> getServicesByUser() {
 		String currentUsername = SecurityContextHolder.getContext().getAuthentication().getName();
