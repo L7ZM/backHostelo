@@ -48,12 +48,17 @@ public class FactureService {
 
 		return factureRepository.save(facture);
 	}
-	
+		
+//	public FactureDTO getFactureByReservation(Long reservationId) {
+//        return factureRepository.getFactureByReservationId(reservationId)
+//            .orElseThrow(() -> new EntityNotFoundException("Facture not found for Reservation ID: " + reservationId));
+//    }
+
 	public FactureDTO getFactureByReservation(Long reservationId) {
         return factureRepository.getFactureByReservationId(reservationId)
             .orElseThrow(() -> new EntityNotFoundException("Facture not found for Reservation ID: " + reservationId));
     }
-
+	
 	public Facture payerFacture(Long factureId) {
 		Facture facture = factureRepository.findById(factureId)
 				.orElseThrow(() -> new IllegalArgumentException("Facture introuvable."));

@@ -19,4 +19,8 @@ public class FactureDTO {
         this.montantTotal = montantTotal;
         this.etatPaiement = etatPaiement;
     }
+
+	public FactureDTO() {
+		super();
+	}
 }
