@@ -1,5 +1,5 @@
-# PFE
-Projet de fin d'étude pour la gestion d'hotel
+# Hostelo
+Projet pour la gestion d'hotel
 
 ## Configuration de l'application
 
@@ -29,20 +29,6 @@ L'administrateur dispose d'un onglet "administration" qui lui permet de controle
     <ul>
         <li>Login: user@gmail.com </li>
         <li>mot de passe: user123 </li>
-    </ul>
-</ul>
-<ul>
-    <li>User:</li>
-    <ul>
-        <li>Login: anas@gmail.com </li>
-        <li>mot de passe: anas@123 </li>
-    </ul>
-</ul>
-<ul>
-    <li>Admin:</li>
-    <ul>
-        <li>Login: admin@example.com</li>
-        <li>mot de passe: admin</li>
     </ul>
 </ul>
 
